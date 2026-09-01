@@ -1,10 +1,502 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>HelloWorld</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PeaceMaker builds practical agent systems that plan, use tools, remember context, and verify results.">
+  <meta name="theme-color" content="#ffffff">
+  <title>PeaceMaker — Agent Systems</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --surface: #f5f5f7;
+      --ink: #1d1d1f;
+      --muted: #86868b;
+      --line: #d2d2d7;
+      --blue: #0071e3;
+      --dark: #000000;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: inherit; }
+
+    .nav-shell {
+      position: fixed;
+      z-index: 20;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 52px;
+      border-bottom: 1px solid rgba(0, 0, 0, .06);
+      background: rgba(255, 255, 255, .78);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+
+    .nav {
+      width: min(980px, calc(100% - 40px));
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .brand {
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: -.02em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      color: rgba(29, 29, 31, .78);
+      text-decoration: none;
+      transition: color 180ms ease;
+    }
+
+    .nav-links a:hover { color: var(--blue); }
+
+    .hero,
+    .statement,
+    .project,
+    .closing {
+      min-height: 100svh;
+      display: grid;
+      align-items: center;
+    }
+
+    .hero {
+      padding: 112px 24px 72px;
+      text-align: center;
+    }
+
+    .hero-inner {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      font-size: clamp(64px, 10vw, 132px);
+      font-weight: 650;
+      letter-spacing: -.065em;
+      line-height: .9;
+    }
+
+    .hero-copy {
+      max-width: 720px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: clamp(20px, 2vw, 28px);
+      letter-spacing: -.025em;
+      line-height: 1.35;
+    }
+
+    .actions {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .text-link {
+      color: var(--blue);
+      font-size: 18px;
+      text-decoration: none;
+    }
+
+    .text-link::after {
+      content: " ›";
+      display: inline-block;
+      transition: transform 180ms ease;
+    }
+
+    .text-link:hover::after { transform: translateX(3px); }
+
+    .product-stage {
+      width: min(940px, 100%);
+      margin: 88px auto 0;
+      padding: clamp(40px, 7vw, 82px);
+      border-radius: 22px;
+      background: var(--surface);
+    }
+
+    .loop {
+      display: grid;
+      grid-template-columns: repeat(5, auto);
+      align-items: center;
+      justify-content: center;
+      gap: clamp(10px, 2vw, 28px);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      font-size: clamp(22px, 4vw, 46px);
+      font-weight: 620;
+      letter-spacing: -.04em;
+    }
+
+    .loop .arrow {
+      color: var(--line);
+      font-weight: 400;
+    }
+
+    .statement {
+      padding: 160px 24px;
+      background: var(--dark);
+      color: #f5f5f7;
+      text-align: center;
+    }
+
+    .statement-inner {
+      width: min(1060px, 100%);
+      margin: 0 auto;
+    }
+
+    .statement h2 {
+      margin-bottom: 36px;
+      font-size: clamp(58px, 9vw, 128px);
+      font-weight: 650;
+      letter-spacing: -.06em;
+      line-height: .94;
+    }
+
+    .statement p {
+      max-width: 760px;
+      margin: 0 auto;
+      color: #a1a1a6;
+      font-size: clamp(21px, 2.4vw, 32px);
+      letter-spacing: -.03em;
+      line-height: 1.32;
+    }
+
+    .project {
+      padding: 140px 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project.soft { background: var(--surface); }
+    .project.white { background: var(--paper); }
+
+    .project-inner {
+      width: min(1040px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, .84fr) minmax(360px, 1.16fr);
+      gap: clamp(64px, 9vw, 128px);
+      align-items: center;
+    }
+
+    .project:nth-of-type(even) .project-copy { order: 2; }
+    .project:nth-of-type(even) .project-visual { order: 1; }
+
+    .project-index {
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .project h3 {
+      margin-bottom: 22px;
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 650;
+      letter-spacing: -.055em;
+      line-height: .96;
+    }
+
+    .project-copy > p {
+      margin-bottom: 28px;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.48;
+      letter-spacing: -.02em;
+    }
+
+    .project-visual {
+      min-height: 520px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    .white .project-visual { background: var(--surface); }
+
+    .visual-type {
+      position: relative;
+      width: 78%;
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      font-size: clamp(64px, 9vw, 128px);
+      font-weight: 650;
+      letter-spacing: -.07em;
+      background: var(--paper);
+    }
+
+    .visual-type::before,
+    .visual-type::after {
+      content: "";
+      position: absolute;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+    }
+
+    .visual-type::before { inset: 10%; }
+    .visual-type::after { inset: 22%; }
+
+    .visual-type span { position: relative; z-index: 1; }
+
+    .closing {
+      padding: 160px 24px 80px;
+      text-align: center;
+      background: var(--paper);
+    }
+
+    .closing-inner {
+      width: min(900px, 100%);
+      margin: 0 auto;
+    }
+
+    .closing h2 {
+      margin-bottom: 26px;
+      font-size: clamp(56px, 9vw, 112px);
+      font-weight: 650;
+      letter-spacing: -.06em;
+      line-height: .94;
+    }
+
+    .closing p {
+      margin-bottom: 34px;
+      color: var(--muted);
+      font-size: 23px;
+      letter-spacing: -.025em;
+    }
+
+    footer {
+      width: min(980px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 22px 0 28px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    footer a { text-decoration: none; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(34px);
+      transition: opacity 620ms var(--ease), transform 620ms var(--ease);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 760px) {
+      .nav { width: min(100% - 28px, 980px); }
+      .nav-links a:first-child { display: none; }
+      .nav-links { gap: 18px; }
+
+      .hero { padding-inline: 18px; }
+      h1 { font-size: clamp(56px, 18vw, 88px); }
+      .hero-copy { font-size: 20px; }
+      .product-stage { margin-top: 64px; }
+      .loop { grid-template-columns: 1fr; gap: 12px; }
+      .loop .arrow { transform: rotate(90deg); }
+
+      .statement,
+      .project,
+      .closing { min-height: auto; }
+
+      .statement { padding-block: 120px; }
+      .project { padding-block: 110px; }
+      .project-inner { grid-template-columns: 1fr; gap: 48px; }
+      .project:nth-of-type(even) .project-copy,
+      .project:nth-of-type(even) .project-visual { order: initial; }
+      .project-visual { min-height: 360px; }
+      .visual-type { width: min(72%, 280px); }
+      .closing { padding-top: 120px; }
+
+      footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Hello World!</h1>
+  <header class="nav-shell">
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="brand" href="#top">PeaceMaker</a>
+      <div class="nav-links">
+        <a href="#vision">Vision</a>
+        <a href="#work">Work</a>
+        <a href="https://github.com/PeaceMaker-best" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner reveal">
+        <p class="eyebrow">PeaceMaker · Agent Engineering</p>
+        <h1>Make agents<br>useful.</h1>
+        <p class="hero-copy">I build practical agent systems that plan, use tools, remember context, and verify their work.</p>
+        <div class="actions">
+          <a class="text-link" href="#work">Explore the work</a>
+          <a class="text-link" href="https://github.com/PeaceMaker-best" target="_blank" rel="noreferrer">View GitHub</a>
+        </div>
+        <div class="product-stage" aria-label="Agent loop: plan, act, verify">
+          <div class="loop">
+            <span>Plan</span><span class="arrow">→</span><span>Act</span><span class="arrow">→</span><span>Verify</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement" id="vision">
+      <div class="statement-inner reveal">
+        <p class="eyebrow">The big vision</p>
+        <h2>Agent 还有很多<br>没做完。</h2>
+        <p>Better planning. Real tools. Useful memory. Verifiable outcomes. The next generation of agents should do more than respond — they should reliably get work done.</p>
+      </div>
+    </section>
+
+    <div id="work">
+      <section class="project soft">
+        <div class="project-inner reveal">
+          <div class="project-copy">
+            <p class="project-index">01 · Visual production</p>
+            <h3>NovaFrame</h3>
+            <p>A local-first AI visual production workspace designed for real e-commerce teams and repeatable creative workflows.</p>
+            <a class="text-link" href="https://github.com/PeaceMaker-best/NovaFrame" target="_blank" rel="noreferrer">View project</a>
+          </div>
+          <div class="project-visual" aria-hidden="true">
+            <div class="visual-type"><span>N</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="project white">
+        <div class="project-inner reveal">
+          <div class="project-copy">
+            <p class="project-index">02 · Model infrastructure</p>
+            <h3>PocketModel</h3>
+            <p>A themed, reliability-focused self-hosted LLM gateway for Anthropic and OpenAI-compatible workflows.</p>
+            <a class="text-link" href="https://github.com/PeaceMaker-best/PocketModel" target="_blank" rel="noreferrer">View project</a>
+          </div>
+          <div class="project-visual" aria-hidden="true">
+            <div class="visual-type"><span>P</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="project soft">
+        <div class="project-inner reveal">
+          <div class="project-copy">
+            <p class="project-index">03 · Vision research</p>
+            <h3>N-PTA</h3>
+            <p>An archived CLIP test-time adaptation implementation focused on reproducible hybrid prompt performance.</p>
+            <a class="text-link" href="https://github.com/PeaceMaker-best/npta-hybrid-71" target="_blank" rel="noreferrer">View project</a>
+          </div>
+          <div class="project-visual" aria-hidden="true">
+            <div class="visual-type"><span>71</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="closing">
+      <div class="closing-inner reveal">
+        <p class="eyebrow">Keep building</p>
+        <h2>One working<br>system at a time.</h2>
+        <p>Ideas matter. Reliable execution matters more.</p>
+        <a class="text-link" href="https://github.com/PeaceMaker-best" target="_blank" rel="noreferrer">Continue on GitHub</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> PeaceMaker</span>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+  </script>
 </body>
 </html>
