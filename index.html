@@ -85,6 +85,99 @@
     .hero,
     .statement,
     .project,
+    .articles {
+      padding: 150px 24px;
+      background: var(--paper);
+    }
+
+    .articles-inner {
+      width: min(1040px, 100%);
+      margin: 0 auto;
+    }
+
+    .articles-heading {
+      max-width: 720px;
+      margin-bottom: 52px;
+    }
+
+    .articles h2 {
+      margin-bottom: 20px;
+      font-size: clamp(52px, 7vw, 88px);
+      font-weight: 650;
+      letter-spacing: -.055em;
+      line-height: .96;
+    }
+
+    .articles-intro {
+      margin: 0;
+      color: var(--muted);
+      font-size: 20px;
+      letter-spacing: -.02em;
+      line-height: 1.5;
+    }
+
+    .article-list {
+      display: grid;
+      gap: 20px;
+    }
+
+    .article-card {
+      position: relative;
+      display: block;
+      padding: clamp(30px, 5vw, 52px);
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, .08);
+      border-radius: 30px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 92% 12%, rgba(0, 113, 227, .14), transparent 32%),
+        linear-gradient(145deg, #fbfbfd 0%, #f1f5fb 100%);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .06);
+      text-decoration: none;
+      transition: transform 280ms var(--ease), box-shadow 280ms var(--ease), border-color 280ms ease;
+    }
+
+    .article-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 113, 227, .24);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, .1);
+    }
+
+    .article-card::after {
+      content: "↗";
+      position: absolute;
+      top: clamp(28px, 5vw, 48px);
+      right: clamp(28px, 5vw, 48px);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+      background: rgba(255, 255, 255, .82);
+      font-size: 20px;
+      transition: transform 280ms var(--ease);
+    }
+
+    .article-card:hover::after { transform: translate(3px, -3px); }
+
+    .article-card h3 {
+      max-width: 760px;
+      margin: 0 70px 14px 0;
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 650;
+      letter-spacing: -.04em;
+      line-height: 1.08;
+    }
+
+    .article-card p {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      letter-spacing: -.015em;
+      line-height: 1.55;
+    }
     .closing {
       min-height: 100svh;
       display: grid;
@@ -294,6 +387,99 @@
 
     .visual-type span { position: relative; z-index: 1; }
 
+    .articles {
+      padding: 150px 24px;
+      background: var(--paper);
+    }
+
+    .articles-inner {
+      width: min(1040px, 100%);
+      margin: 0 auto;
+    }
+
+    .articles-heading {
+      max-width: 720px;
+      margin-bottom: 52px;
+    }
+
+    .articles h2 {
+      margin-bottom: 20px;
+      font-size: clamp(52px, 7vw, 88px);
+      font-weight: 650;
+      letter-spacing: -.055em;
+      line-height: .96;
+    }
+
+    .articles-intro {
+      margin: 0;
+      color: var(--muted);
+      font-size: 20px;
+      letter-spacing: -.02em;
+      line-height: 1.5;
+    }
+
+    .article-list {
+      display: grid;
+      gap: 20px;
+    }
+
+    .article-card {
+      position: relative;
+      display: block;
+      padding: clamp(30px, 5vw, 52px);
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, .08);
+      border-radius: 30px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 92% 12%, rgba(0, 113, 227, .14), transparent 32%),
+        linear-gradient(145deg, #fbfbfd 0%, #f1f5fb 100%);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .06);
+      text-decoration: none;
+      transition: transform 280ms var(--ease), box-shadow 280ms var(--ease), border-color 280ms ease;
+    }
+
+    .article-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 113, 227, .24);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, .1);
+    }
+
+    .article-card::after {
+      content: "↗";
+      position: absolute;
+      top: clamp(28px, 5vw, 48px);
+      right: clamp(28px, 5vw, 48px);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+      background: rgba(255, 255, 255, .82);
+      font-size: 20px;
+      transition: transform 280ms var(--ease);
+    }
+
+    .article-card:hover::after { transform: translate(3px, -3px); }
+
+    .article-card h3 {
+      max-width: 760px;
+      margin: 0 70px 14px 0;
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 650;
+      letter-spacing: -.04em;
+      line-height: 1.08;
+    }
+
+    .article-card p {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      letter-spacing: -.015em;
+      line-height: 1.55;
+    }
     .closing {
       padding: 160px 24px 80px;
       text-align: center;
@@ -359,7 +545,100 @@
 
       .statement,
       .project,
-      .closing { min-height: auto; }
+      .articles {
+      padding: 150px 24px;
+      background: var(--paper);
+    }
+
+    .articles-inner {
+      width: min(1040px, 100%);
+      margin: 0 auto;
+    }
+
+    .articles-heading {
+      max-width: 720px;
+      margin-bottom: 52px;
+    }
+
+    .articles h2 {
+      margin-bottom: 20px;
+      font-size: clamp(52px, 7vw, 88px);
+      font-weight: 650;
+      letter-spacing: -.055em;
+      line-height: .96;
+    }
+
+    .articles-intro {
+      margin: 0;
+      color: var(--muted);
+      font-size: 20px;
+      letter-spacing: -.02em;
+      line-height: 1.5;
+    }
+
+    .article-list {
+      display: grid;
+      gap: 20px;
+    }
+
+    .article-card {
+      position: relative;
+      display: block;
+      padding: clamp(30px, 5vw, 52px);
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, .08);
+      border-radius: 30px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 92% 12%, rgba(0, 113, 227, .14), transparent 32%),
+        linear-gradient(145deg, #fbfbfd 0%, #f1f5fb 100%);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .06);
+      text-decoration: none;
+      transition: transform 280ms var(--ease), box-shadow 280ms var(--ease), border-color 280ms ease;
+    }
+
+    .article-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 113, 227, .24);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, .1);
+    }
+
+    .article-card::after {
+      content: "↗";
+      position: absolute;
+      top: clamp(28px, 5vw, 48px);
+      right: clamp(28px, 5vw, 48px);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+      background: rgba(255, 255, 255, .82);
+      font-size: 20px;
+      transition: transform 280ms var(--ease);
+    }
+
+    .article-card:hover::after { transform: translate(3px, -3px); }
+
+    .article-card h3 {
+      max-width: 760px;
+      margin: 0 70px 14px 0;
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 650;
+      letter-spacing: -.04em;
+      line-height: 1.08;
+    }
+
+    .article-card p {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      letter-spacing: -.015em;
+      line-height: 1.55;
+    }
+    .closing { min-height: auto; }
 
       .statement { padding-block: 120px; }
       .project { padding-block: 110px; }
@@ -368,7 +647,100 @@
       .project:nth-of-type(even) .project-visual { order: initial; }
       .project-visual { min-height: 360px; }
       .visual-type { width: min(72%, 280px); }
-      .closing { padding-top: 120px; }
+      .articles {
+      padding: 150px 24px;
+      background: var(--paper);
+    }
+
+    .articles-inner {
+      width: min(1040px, 100%);
+      margin: 0 auto;
+    }
+
+    .articles-heading {
+      max-width: 720px;
+      margin-bottom: 52px;
+    }
+
+    .articles h2 {
+      margin-bottom: 20px;
+      font-size: clamp(52px, 7vw, 88px);
+      font-weight: 650;
+      letter-spacing: -.055em;
+      line-height: .96;
+    }
+
+    .articles-intro {
+      margin: 0;
+      color: var(--muted);
+      font-size: 20px;
+      letter-spacing: -.02em;
+      line-height: 1.5;
+    }
+
+    .article-list {
+      display: grid;
+      gap: 20px;
+    }
+
+    .article-card {
+      position: relative;
+      display: block;
+      padding: clamp(30px, 5vw, 52px);
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, .08);
+      border-radius: 30px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 92% 12%, rgba(0, 113, 227, .14), transparent 32%),
+        linear-gradient(145deg, #fbfbfd 0%, #f1f5fb 100%);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .06);
+      text-decoration: none;
+      transition: transform 280ms var(--ease), box-shadow 280ms var(--ease), border-color 280ms ease;
+    }
+
+    .article-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 113, 227, .24);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, .1);
+    }
+
+    .article-card::after {
+      content: "↗";
+      position: absolute;
+      top: clamp(28px, 5vw, 48px);
+      right: clamp(28px, 5vw, 48px);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+      background: rgba(255, 255, 255, .82);
+      font-size: 20px;
+      transition: transform 280ms var(--ease);
+    }
+
+    .article-card:hover::after { transform: translate(3px, -3px); }
+
+    .article-card h3 {
+      max-width: 760px;
+      margin: 0 70px 14px 0;
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 650;
+      letter-spacing: -.04em;
+      line-height: 1.08;
+    }
+
+    .article-card p {
+      max-width: 720px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      letter-spacing: -.015em;
+      line-height: 1.55;
+    }
+    .closing { padding-top: 120px; }
 
       footer {
         align-items: flex-start;
@@ -394,6 +766,7 @@
       <div class="nav-links">
         <a href="#vision">Vision</a>
         <a href="#work">Work</a>
+        <a href="#articles">Articles</a>
         <a href="https://github.com/PeaceMaker-best" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </nav>
@@ -469,6 +842,21 @@
       </section>
     </div>
 
+    <section class="articles" id="articles">
+      <div class="articles-inner">
+        <div class="articles-heading reveal">
+          <p class="eyebrow">Writing</p>
+          <h2>Articles.</h2>
+          <p class="articles-intro">Practical notes on understanding and building agent systems from first principles.</p>
+        </div>
+        <div class="article-list">
+          <a class="article-card reveal" href="./articles/mini-agent-from-scratch.html">
+            <h3>从零手搓一个最小版 Agent</h3>
+            <p>不用 LangChain 或 LangGraph，用纯 Python 看懂 Planner、Executor、Verifier、State 与 Retry 的完整闭环。</p>
+          </a>
+        </div>
+      </div>
+    </section>
     <section class="closing">
       <div class="closing-inner reveal">
         <p class="eyebrow">Keep building</p>
