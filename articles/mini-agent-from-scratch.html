@@ -162,6 +162,64 @@
     th, td { padding: 15px 18px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
     th { background: var(--surface); font-weight: 650; }
     tr:last-child td { border-bottom: 0; }
+    .pattern-grid {
+      margin: 30px 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .pattern-card {
+      min-height: 190px;
+      padding: 22px;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 20px;
+      background: var(--surface);
+    }
+    .pattern-card strong {
+      display: block;
+      margin-bottom: 14px;
+      font-size: 18px;
+    }
+    .pattern-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .model-loop {
+      margin: 32px 0;
+      padding: 28px;
+      border-radius: 24px;
+      display: grid;
+      grid-template-columns: repeat(7, auto);
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(145deg, #f5f5f7, #edf5ff);
+    }
+    .model-loop strong {
+      padding: 11px 15px;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      font-size: 15px;
+      white-space: nowrap;
+    }
+    .model-loop span { color: #a1a1a6; }
+    .tradeoff-grid {
+      margin: 30px 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .tradeoff {
+      padding: 26px;
+      border-radius: 22px;
+      background: var(--surface);
+    }
+    .tradeoff.control { background: #f1f7ff; }
+    .tradeoff h3 { margin: 0 0 12px; font-size: 21px; }
+    .tradeoff p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.65; }
     .next {
       padding: 34px;
       border-radius: 26px;
@@ -189,6 +247,10 @@
       .flow { flex-direction: column; }
       .flow span { text-align: center; width: 100%; }
       .flow .arrow { width: auto; }
+      .pattern-grid, .tradeoff-grid { grid-template-columns: 1fr; }
+      .pattern-card { min-height: auto; }
+      .model-loop { grid-template-columns: 1fr; text-align: center; }
+      .model-loop span { transform: rotate(90deg); }
       pre { margin-inline: -4px; padding: 18px; border-radius: 16px; font-size: 13px; }
       p, li { font-size: 17px; }
       footer { align-items: flex-start; flex-direction: column; gap: 8px; }
@@ -434,6 +496,100 @@ else:
         <p>以后再看到 Multi-Agent Orchestration，可以先寻找这三个东西：共享的 State、决定角色的 Router，以及推动系统继续运行的循环。</p>
       </section>
 
+      <section id="mental-model">
+        <h2>我的 Agent 心智模型</h2>
+        <p>理解完代码骨架后，我会用一个更统一的模型来看 Agent：它既像一个拥有大脑、记忆和工具的人，也像一段被严格控制流约束的程序。</p>
+
+        <h3>把 Agent 类比成人</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Agent 里的组件</th><th>类比人的能力</th></tr></thead>
+            <tbody>
+              <tr><td><strong>LLM</strong></td><td>大脑里负责理解、推理和生成的部分</td></tr>
+              <tr><td><strong>State</strong></td><td>工作记忆 / 任务笔记本</td></tr>
+              <tr><td><strong>Memory</strong></td><td>长期记忆</td></tr>
+              <tr><td><strong>Tool</strong></td><td>手、眼睛、浏览器、计算器等外部能力</td></tr>
+              <tr><td><strong>Planner</strong></td><td>先想“我要分几步做”</td></tr>
+              <tr><td><strong>Verifier</strong></td><td>做完后检查“我做对了吗”</td></tr>
+              <tr><td><strong>Router</strong></td><td>判断“这件事应该交给谁，或使用什么能力”</td></tr>
+              <tr><td><strong>Agent Loop</strong></td><td>想 → 做 → 看结果 → 再想</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <blockquote><p>State 不是完整的大脑，更像是“大脑允许自己显式记下来的工作区”。</p></blockquote>
+        <p>如果系统只允许 State 保存下面这些字段，那么 Agent 后续就只能显式依赖这些信息继续运行：</p>
+<pre><code>state = {
+    "goal": ...,
+    "plan": ...,
+    "current_step": ...,
+    "tool_result": ...,
+    "retry_count": ...
+}</code></pre>
+
+        <h3>Agent 范式是人为设计的思维模板</h3>
+        <p>Agent 看起来很灵活，但它的行为会被系统预先设计的“思考模式”限制。不同范式，本质是在规定 LLM 应该以什么顺序思考与行动。</p>
+        <div class="pattern-grid">
+          <div class="pattern-card">
+            <strong>ReAct</strong>
+            <p>思考 → 调用工具 → 观察结果 → 再思考 → 再行动</p>
+          </div>
+          <div class="pattern-card">
+            <strong>Plan-and-Execute</strong>
+            <p>先生成完整计划，再按照计划逐步执行</p>
+          </div>
+          <div class="pattern-card">
+            <strong>Reflection</strong>
+            <p>先完成任务，再检查问题，根据反馈进行修改</p>
+          </div>
+        </div>
+        <p>因此，Agent 同时拥有两种看似矛盾的特征：<strong>LLM 的灵活性</strong>与<strong>程序控制流的确定性</strong>。系统可以要求它先规划、必须检查结果、失败只能重试，甚至连续失败三次后直接退出。</p>
+
+        <h3>Tool 不思考，它只执行</h3>
+        <p>Tool 本质上只是普通函数或外部 API。真正决定“要不要调用这个工具”的，是 Agent 或 LLM。</p>
+<pre><code>Agent 决定搜索 "GPT-6 price"
+        ↓
+程序调用 search()
+        ↓
+Tool 返回结果
+        ↓
+结果写回 State / messages
+        ↓
+LLM 读取 Observation，决定下一步</code></pre>
+        <p>例如 <code>calculator(a, b)</code> 只负责返回计算结果。结果 <code>42</code> 会成为新的 Observation，Agent 再根据它决定是继续行动，还是生成最终答案。</p>
+
+        <h3>统一模型：State → Reason → Act → Observe</h3>
+        <div class="model-loop" aria-label="Unified agent loop">
+          <strong>State</strong><span>→</span>
+          <strong>Reason</strong><span>→</span>
+          <strong>Act</strong><span>→</span>
+          <strong>Observe</strong>
+        </div>
+        <p>Observation 会再次更新 State，然后进入下一轮 Reason。无论外层框架叫 ReAct、LangGraph 还是 Multi-Agent Orchestration，核心循环都可以压缩成这四步。</p>
+
+        <h3>自由度与可控性的矛盾</h3>
+        <p>完全放开 LLM，会获得更强的灵活性，也更容易出现跑偏、死循环、工具误用、Token 浪费和难以调试的问题。生产系统通常必须主动加上边界。</p>
+        <div class="tradeoff-grid">
+          <div class="tradeoff">
+            <h3>More freedom</h3>
+            <p>探索空间更大，能处理更多未知场景，但行为更难预测与复现。</p>
+          </div>
+          <div class="tradeoff control">
+            <h3>More control</h3>
+            <p>系统更加安全、可观测和可验证，但需要工程师精心设计约束。</p>
+          </div>
+        </div>
+        <ul>
+          <li>最多执行 10 步，避免无限循环。</li>
+          <li>只开放完成任务真正需要的工具。</li>
+          <li>查询数据库前必须通过权限检查。</li>
+          <li>生成 SQL 或重要结果后必须经过 Verifier。</li>
+          <li>连续失败 3 次必须退出或重新规划。</li>
+          <li>转账等高风险操作必须由人确认。</li>
+        </ul>
+        <blockquote><p>真正的 Agent 工程，不只是让 LLM 想得更自由，而是把这种自由限制在安全、可观测、可验证的轨道里。</p></blockquote>
+        <p>所以这些看似零散的概念，其实都在回答同一个问题：<strong>当前知道什么 → 下一步谁来决定 → 做什么 → 得到什么 → 接下来去哪？</strong></p>
+      </section>
       <section>
         <h2>为什么暂时不用真正的 LLM？</h2>
         <p>如果一开始就加入模型调用，注意力很容易被消息格式、函数调用、结构化输出和异常解析分散。假工具让每一步都可预测，方便观察数据如何流动、失败如何重试。</p>
