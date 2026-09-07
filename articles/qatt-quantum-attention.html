@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Qatt 量子注意力设计图解：4-qubit 电路、两阶段训练、γ 门控、温度系数与 UCR/UEA 实验结果。">
+<meta name="theme-color" content="#F6F5FA">
+<title>Qatt · 量子注意力设计图解 — PeaceMaker</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F6F5FA; --surface:#FFFFFF; --ink:#1C1D2E; --muted:#5A5B72; --faint:#8B8DA6;
+  --line:#E3E1EF; --line-strong:#CFCDE4;
+  --quantum:#6A48E5; --quantum-ink:#4E32C4; --quantum-soft:#EFEAFD; --quantum-line:#C9BBF5;
+  --classical:#0B7C86; --classical-ink:#0A5F66; --classical-soft:#E1F2F2; --classical-line:#B3DDDE;
+  --amber:#B97E16; --amber-soft:#FBF1DC; --amber-line:#EBD39B;
+  --red:#C8484A; --red-soft:#FBE9E9; --red-line:#EFC0C0;
+  --green:#2E8B57; --green-soft:#E6F4EC;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#13141F; --surface:#1B1D2C; --ink:#ECECF5; --muted:#A6A8C2; --faint:#6E7090;
+    --line:#2B2E44; --line-strong:#3A3E5C;
+    --quantum:#A18BFF; --quantum-ink:#BFB0FF; --quantum-soft:#252142; --quantum-line:#3D3670;
+    --classical:#4FD1C5; --classical-ink:#7FE3DA; --classical-soft:#102F35; --classical-line:#1E4A50;
+    --amber:#EFB64F; --amber-soft:#33291A; --amber-line:#5C4A24;
+    --red:#F08080; --red-soft:#3A2022; --red-line:#5E3436;
+    --green:#6FD39B; --green-soft:#16301F;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#13141F; --surface:#1B1D2C; --ink:#ECECF5; --muted:#A6A8C2; --faint:#6E7090;
+  --line:#2B2E44; --line-strong:#3A3E5C;
+  --quantum:#A18BFF; --quantum-ink:#BFB0FF; --quantum-soft:#252142; --quantum-line:#3D3670;
+  --classical:#4FD1C5; --classical-ink:#7FE3DA; --classical-soft:#102F35; --classical-line:#1E4A50;
+  --amber:#EFB64F; --amber-soft:#33291A; --amber-line:#5C4A24;
+  --red:#F08080; --red-soft:#3A2022; --red-line:#5E3436;
+  --green:#6FD39B; --green-soft:#16301F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans","PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-size:16px; line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:980px; margin:0 auto; padding:0 28px 120px}
+
+/* ---------- hero ---------- */
+header{padding:72px 0 40px; border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--quantum); font-weight:600; margin-bottom:18px;
+  display:flex; align-items:center; gap:10px;
+}
+.eyebrow::before{content:""; width:28px; height:2px; background:var(--quantum)}
+h1{
+  font-family:"Sora","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:clamp(30px,4.6vw,46px); font-weight:800; line-height:1.2; letter-spacing:-.01em;
+  text-wrap:balance; margin-bottom:16px;
+}
+h1 .q{color:var(--quantum)}
+.sub{font-size:17.5px; color:var(--muted); max-width:640px}
+.stats{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-top:36px;
+}
+.stat{background:var(--surface); padding:18px 20px 16px}
+.stat .v{font-family:"Sora",sans-serif; font-size:26px; font-weight:700; line-height:1.1; font-variant-numeric:tabular-nums}
+.stat .v .small{font-size:15px; font-weight:600; color:var(--muted)}
+.stat .k{font-size:13px; color:var(--muted); margin-top:5px}
+.stat.q .v{color:var(--quantum)}
+.stat.c .v{color:var(--classical)}
+
+/* ---------- sections ---------- */
+section{padding:52px 0 8px}
+.sec-head{display:flex; align-items:baseline; gap:16px; margin-bottom:10px}
+.sec-num{
+  font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600; color:var(--quantum);
+  border:1px solid var(--quantum-line); background:var(--quantum-soft);
+  border-radius:6px; padding:2px 9px; white-space:nowrap;
+}
+h2{
+  font-family:"Sora","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:25px; font-weight:700; letter-spacing:-.01em; text-wrap:balance;
+}
+.sec-lead{color:var(--muted); max-width:700px; margin-bottom:28px}
+h3{
+  font-family:"Sora","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:17.5px; font-weight:700; margin:30px 0 12px;
+}
+p{margin-bottom:12px}
+p:last-child{margin-bottom:0}
+strong{font-weight:700}
+code,.mono{font-family:"IBM Plex Mono",monospace; font-size:.88em}
+.iv{color:var(--quantum); font-weight:600}
+.cv{color:var(--classical); font-weight:600}
+.av{color:var(--amber); font-weight:600}
+
+/* ---------- cards / panels ---------- */
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  padding:22px 24px;
+}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+.grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.pill{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:11.5px; font-weight:600;
+  letter-spacing:.06em; padding:2px 10px; border-radius:99px; vertical-align:1px;
+}
+.pill.q{background:var(--quantum-soft); color:var(--quantum-ink); border:1px solid var(--quantum-line)}
+.pill.c{background:var(--classical-soft); color:var(--classical-ink); border:1px solid var(--classical-line)}
+.pill.a{background:var(--amber-soft); color:var(--amber); border:1px solid var(--amber-line)}
+
+/* analogy table */
+table{width:100%; border-collapse:collapse; font-size:14.5px}
+th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{
+  font-family:"Sora",sans-serif; font-size:12.5px; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--faint); font-weight:600; border-bottom:1px solid var(--line-strong);
+}
+tr:last-child td{border-bottom:none}
+td .mono{font-size:12.5px; color:var(--muted)}
+
+/* bloch */
+.bloch-wrap{display:flex; gap:20px; align-items:center; flex-wrap:wrap}
+.bloch-wrap svg{flex:0 0 auto}
+.bloch-note{flex:1; min-width:240px}
+
+/* pipeline */
+.pipe{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:26px 24px;
+  overflow-x:auto;
+}
+.pipe-inner{min-width:820px; display:flex; flex-direction:column; gap:10px}
+.pipe-row{display:flex; align-items:stretch; gap:0}
+.box{
+  border-radius:10px; padding:10px 12px; font-size:13px; line-height:1.45; text-align:center;
+  display:flex; flex-direction:column; justify-content:center; gap:2px;
+  border:1.5px solid var(--line-strong); background:var(--bg); min-width:0;
+}
+.box .bt{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--faint)}
+.box .bb{font-weight:600; font-size:13.5px}
+.box.classic{border-color:var(--classical-line); background:var(--classical-soft)}
+.box.quantum{border-color:var(--quantum-line); background:var(--quantum-soft)}
+.box.gate{border-color:var(--amber-line); background:var(--amber-soft)}
+.arrow{
+  align-self:center; padding:0 7px; color:var(--faint); font-family:"IBM Plex Mono",monospace;
+  font-size:15px; flex:0 0 auto;
+}
+.flow-label{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--faint); letter-spacing:.08em;
+  margin:2px 0 -2px;
+}
+.q-zone{
+  border:1.5px dashed var(--quantum-line); border-radius:12px; padding:10px 12px;
+  position:relative; transition:opacity .3s, background .3s;
+}
+.q-zone-tag{
+  position:absolute; top:-10px; left:14px; background:var(--surface); padding:0 8px;
+  font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:600; letter-spacing:.1em;
+  color:var(--quantum);
+}
+[data-phase="1"] .q-zone{opacity:.28; background:transparent}
+[data-phase="1"] .q-zone .q-zone-tag::after{content:" · 阶段一关闭 (γ=0)"; color:var(--faint)}
+[data-phase="2"] .q-zone .q-zone-tag::after{content:" · 阶段二开启 (γ 可学习)"}
+.phase-btns{display:flex; gap:10px; margin-bottom:18px}
+.pbtn{
+  font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600; cursor:pointer;
+  padding:8px 18px; border-radius:9px; border:1.5px solid var(--line-strong);
+  background:var(--surface); color:var(--muted);
+}
+.pbtn.active-p1{border-color:var(--classical); background:var(--classical-soft); color:var(--classical-ink)}
+.pbtn.active-p2{border-color:var(--quantum); background:var(--quantum-soft); color:var(--quantum-ink)}
+.phase-desc{display:none; margin-top:16px}
+.phase-desc.show{display:block}
+
+/* circuit */
+.circuit{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:28px 20px 20px;
+  overflow-x:auto;
+}
+.circuit svg{min-width:760px; width:100%; height:auto; display:block}
+.circuit-legend{
+  display:flex; gap:20px; flex-wrap:wrap; margin-top:14px;
+  font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted);
+}
+.legend-dot{display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:-1px}
+
+/* formula */
+.formula{
+  font-family:"IBM Plex Mono",monospace; font-size:14.5px; line-height:2;
+  background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:18px 24px;
+  overflow-x:auto;
+}
+.formula .cm{color:var(--faint)}
+
+/* problem/solution cards */
+.ps{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+.ps .problem{border-left:4px solid var(--red); background:var(--red-soft); border-radius:10px; padding:16px 18px}
+.ps .solution{border-left:4px solid var(--green); background:var(--green-soft); border-radius:10px; padding:16px 18px}
+.ps h4{font-size:14.5px; font-weight:700; margin-bottom:6px}
+.ps .problem h4{color:var(--red)}
+.ps .solution h4{color:var(--green)}
+.ps p{font-size:14px; margin-bottom:6px}
+
+/* heatmap interactivity */
+.tau-panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:22px 24px;
+  display:grid; grid-template-columns:1fr 280px; gap:26px; align-items:center;
+}
+.tau-controls .tau-val{
+  font-family:"Sora",sans-serif; font-size:30px; font-weight:700; color:var(--quantum);
+  font-variant-numeric:tabular-nums;
+}
+input[type=range]{width:100%; accent-color:var(--quantum); margin:10px 0 6px}
+.tau-verdict{
+  margin-top:12px; padding:10px 14px; border-radius:9px; font-size:13.5px; font-weight:600;
+}
+.tau-verdict.flat{background:var(--red-soft); color:var(--red); border:1px solid var(--red-line)}
+.tau-verdict.sharp{background:var(--green-soft); color:var(--green); border:1px solid var(--line)}
+.heat-wrap{overflow-x:auto}
+.heat-grid{display:grid; grid-template-columns:repeat(6,38px); gap:3px; justify-content:center}
+.heat-cell{width:38px; height:38px; border-radius:6px; display:flex; align-items:center; justify-content:center;
+  font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--ink); transition:background .15s}
+.heat-axis{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--faint); text-align:center; margin-top:6px}
+
+/* results */
+.res-bars{display:flex; flex-direction:column; gap:14px; margin:8px 0 4px}
+.bar-row{display:grid; grid-template-columns:130px 1fr 90px; align-items:center; gap:14px; font-size:14px}
+.bar-track{background:var(--bg); border:1px solid var(--line); border-radius:8px; height:30px; position:relative; overflow:hidden}
+.bar-fill{height:100%; border-radius:7px; display:flex; align-items:center; padding-left:10px;
+  font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:600; color:#fff;
+  font-variant-numeric:tabular-nums; transition:width .4s}
+.bar-fill.q{background:var(--quantum)}
+.bar-fill.c{background:var(--classical)}
+.bar-fill.gray{background:var(--faint)}
+.win{color:var(--green); font-weight:700}
+.lose{color:var(--red); font-weight:700}
+
+.talk{
+  margin-top:40px; border:1.5px solid var(--quantum-line); background:var(--quantum-soft);
+  border-radius:14px; padding:24px 28px;
+}
+.talk h3{margin-top:0; color:var(--quantum-ink)}
+.talk p{font-size:15px}
+.foot{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); color:var(--faint);
+  font-family:"IBM Plex Mono",monospace; font-size:12px}
+
+
+.portfolio-nav{
+  min-height:52px; display:flex; align-items:center; justify-content:space-between; gap:20px;
+  border-bottom:1px solid var(--line); font-family:"IBM Plex Mono",monospace; font-size:12.5px;
+}
+.portfolio-nav a{color:var(--muted); text-decoration:none; transition:color .18s ease}
+.portfolio-nav a:hover{color:var(--quantum)}
+.portfolio-nav strong{color:var(--quantum); letter-spacing:.08em}
+@media (max-width:760px){
+  .stats{grid-template-columns:1fr 1fr}
+  .grid2,.grid3,.ps,.tau-panel{grid-template-columns:1fr}
+  .bar-row{grid-template-columns:96px 1fr 76px}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<nav class="portfolio-nav" aria-label="Article navigation"><a href="../index.html#articles">← Back to Articles</a><strong>Qatt</strong></nav>
+
+<header>
+  <div class="eyebrow">Qatt · Quantum Attention · Design & Training</div>
+  <h1><span class="q">Qatt</span>：4 个量子比特，<br>怎么当注意力机制用？</h1>
+  <p class="sub">面向深度学习背景的通俗图解：Qatt 怎么用量子电路替代 Q/K/V 线性层、为什么要两阶段训练，以及 γ 门控和温度系数解决了什么。所有数字来自 ECG / UCR / UEA 上的真实实验。</p>
+  <div class="stats">
+    <div class="stat q"><div class="v">4 <span class="small">qubits</span></div><div class="k">量子比特数（模拟 128→4 瓶颈）</div></div>
+    <div class="stat q"><div class="v">59 <span class="small">vs 2050</span></div><div class="k">Qatt 参数 vs SE/CBAM（≈1/30）</div></div>
+    <div class="stat"><div class="v">+7.8<span class="small"> pp</span></div><div class="k">ECGFiveDays 对同参经典对照提升</div></div>
+    <div class="stat c"><div class="v">10 <span class="small">datasets</span></div><div class="k">UCR 单变量 + UEA 多变量公开数据集</div></div>
+  </div>
+</header>
+
+<!-- ============ 1 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-num">01</span><h2>先用深度学习，把量子计算翻译一遍</h2></div>
+  <p class="sec-lead">你不需要重学量子力学。这个项目里用到的量子概念，每一个都能在神经网络里找到对应物——整个量子电路就是一个 <strong>可微的、PyTorch 里的前向层</strong>。</p>
+
+  <div class="card" style="margin-bottom:18px">
+    <table>
+      <thead><tr><th style="width:34%">你熟悉的深度学习</th><th>这个项目里的量子对应物</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>神经元 / 特征标量</strong></td>
+          <td><strong>Qubit（量子比特）</strong>：状态是球面上的一个单位向量（Bloch 球）。它不是 0/1 开关，而是"可连续转动的指针"——和一个连续取值的激活值一样可以携带信息。</td>
+        </tr>
+        <tr>
+          <td><strong>带权重的线性变换</strong>，权重 w 可训练</td>
+          <td><strong>旋转门 RX/RY/RZ(θ)</strong>：把 qubit 的状态向量绕轴转一个角度，<span class="mono">θ 就是可训练参数</span>，等价于线性层的权重，由 Adam 更新。</td>
+        </tr>
+        <tr>
+          <td><strong>层间特征交互 / 混合</strong>（如 attention 里 token 互相加权）</td>
+          <td><strong>CNOT 纠缠门</strong>：让一个 qubit 的状态受另一个控制，qubit 之间产生耦合——这是量子版的"特征交互"。</td>
+        </tr>
+        <tr>
+          <td><strong>tanh / sigmoid</strong>：把输出限幅到有界区间</td>
+          <td><strong>测量 Pauli-Z 期望值 ⟨Z⟩</strong>：电路跑完读出来的数，<strong>值域严格在 [−1, 1]</strong>——天然就是一个 tanh 式的有界读出。</td>
+        </tr>
+        <tr>
+          <td><strong>堆叠多层网络</strong>提升表达力</td>
+          <td><strong>电路深度 + data re-uploading</strong>：同一份数据在多个层位反复编码进电路（类似数据反复过多个可训练块），浅电路也能表达复杂函数。</td>
+        </tr>
+        <tr>
+          <td><strong>前向 + 反向传播</strong></td>
+          <td><strong>PennyLane</strong>：量子电路对 θ 可微，直接挂进 PyTorch 计算图，<span class="mono">loss.backward()</span> 照常工作。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card bloch-wrap">
+    <svg width="210" height="210" viewBox="0 0 210 210">
+      <circle cx="105" cy="105" r="80" fill="none" stroke="var(--line-strong)" stroke-width="1.5"/>
+      <ellipse cx="105" cy="105" rx="80" ry="26" fill="none" stroke="var(--line)" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <line x1="25" y1="105" x2="185" y2="105" stroke="var(--line-strong)" stroke-width="1"/>
+      <line x1="105" y1="25" x2="105" y2="185" stroke="var(--line-strong)" stroke-width="1"/>
+      <text x="186" y="109" font-family="IBM Plex Mono" font-size="11" fill="var(--faint)">|0⟩</text>
+      <text x="180" y="100" font-family="IBM Plex Mono" font-size="11" fill="var(--faint)"></text>
+      <text x="96" y="20" font-family="IBM Plex Mono" font-size="11" fill="var(--faint)">Z</text>
+      <!-- state vector -->
+      <line x1="105" y1="105" x2="152" y2="62" stroke="var(--quantum)" stroke-width="2.5"/>
+      <circle cx="152" cy="62" r="5" fill="var(--quantum)"/>
+      <!-- angle arc -->
+      <path d="M 105 60 A 45 45 0 0 1 137 72" fill="none" stroke="var(--amber)" stroke-width="2"/>
+      <text x="120" y="58" font-family="IBM Plex Mono" font-size="13" fill="var(--amber)" font-weight="600">θ</text>
+      <text x="60" y="150" font-family="PingFang SC,sans-serif" font-size="12" fill="var(--muted)">旋转门 = 转 θ 角</text>
+      <text x="60" y="168" font-family="PingFang SC,sans-serif" font-size="12" fill="var(--muted)">θ 可训练，如同权重</text>
+    </svg>
+    <div class="bloch-note">
+      <h3 style="margin-top:0">一个 qubit 干的事，一句话：</h3>
+      <p>输入一个角度 <code>x</code>（来自数据）→ 旋转门把指针转上去 → 可训练旋转门 <code>RY(θ)</code> 再转一下 → 和别的 qubit 纠缠 → 最后<strong>测量指针在 Z 轴上的投影</strong>，读出一个 [−1,1] 的数。</p>
+      <p>4 个 qubit = 4 个这样的指针并行，读出最多 4 个数。这正好对应一个 4 维的瓶颈表示。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-num">02</span><h2>Qatt 插在网络的什么位置</h2></div>
+  <p class="sec-lead">不是用量子网络替代整个模型，而是在经典 FCN 骨干提完特征后，把<strong>「算注意力权重」这一小段工作</strong>交给量子电路。点下面按钮切换两个训练阶段，看数据流的变化：</p>
+
+  <div class="phase-btns">
+    <button class="pbtn active-p1" id="btn-p1" onclick="setPhase(1)">阶段一：经典骨干预热</button>
+    <button class="pbtn" id="btn-p2" onclick="setPhase(2)">阶段二：量子分支接入</button>
+  </div>
+
+  <div class="pipe" id="pipeline" data-phase="1">
+    <div class="pipe-inner">
+      <div class="flow-label">CLASSICAL BACKBONE — 全程参与</div>
+      <div class="pipe-row">
+        <div class="box classic" style="flex:1"><span class="bb">输入序列</span><span class="bt">(B, 1, L)</span></div>
+        <span class="arrow">→</span>
+        <div class="box classic" style="flex:1.4"><span class="bb">Conv1d ×3 + BN + ReLU</span><span class="bt">1→128→256→128, FCN (Wang 2017)</span></div>
+        <span class="arrow">→</span>
+        <div class="box classic" style="flex:1"><span class="bb">特征图</span><span class="bt">(B, 128, L)：L 个 128 维 token</span></div>
+      </div>
+
+      <div class="q-zone">
+        <span class="q-zone-tag">QUANTUM ATTENTION BRANCH</span>
+        <div class="flow-label" style="margin-top:6px">每个时间步 t：</div>
+        <div class="pipe-row">
+          <div class="box gate" style="flex:1.1"><span class="bb">Linear(128→4)</span><span class="bt">tanh·π 限幅成角度</span></div>
+          <span class="arrow">→</span>
+          <div class="box quantum" style="flex:.8"><span class="bb">Q 电路</span><span class="bt">4 qubit → 1 标量</span></div>
+          <div class="box quantum" style="flex:.8"><span class="bb">K 电路</span><span class="bt">4 qubit → 1 标量</span></div>
+          <div class="box quantum" style="flex:.8"><span class="bb">V 电路</span><span class="bt">4 qubit → 4 维向量</span></div>
+          <span class="arrow">→</span>
+          <div class="box quantum" style="flex:1.2"><span class="bb">softmax(τ·QKᵀ) 加权 V</span><span class="bt">L×L 时间注意力</span></div>
+          <span class="arrow">→</span>
+          <div class="box gate" style="flex:1"><span class="bb">Linear(4→128)</span><span class="bt">投回特征维度</span></div>
+        </div>
+      </div>
+
+      <div class="flow-label">AGGREGATION</div>
+      <div class="pipe-row">
+        <div class="box" style="flex:1.2"><span class="bb">⊕ 残差相加</span><span class="bt">out = LN(γ·量子分支 + x)</span></div>
+        <span class="arrow">→</span>
+        <div class="box classic" style="flex:.8"><span class="bb">GAP</span><span class="bt">全局平均池化</span></div>
+        <span class="arrow">→</span>
+        <div class="box classic" style="flex:.8"><span class="bb">FC 分类头</span><span class="bt">→ 类别</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card phase-desc show" id="desc-p1" style="margin-top:16px">
+    <p style="margin:0"><span class="pill c">PHASE 1</span> &nbsp;量子分支被 <strong>γ=0 门控关闭</strong>，残差路径只剩 <code>out = LN(x)</code>，模型<strong>严格等价于纯 FCN</strong>。此时正常训练卷积骨干 40–60 个 epoch（Adam, lr=1e-3），让特征提取先学到位。</p>
+  </div>
+  <div class="card phase-desc" id="desc-p2" style="margin-top:16px">
+    <p style="margin:0"><span class="pill q">PHASE 2</span> &nbsp;打开量子分支训 20 个 epoch。<strong>γ 从 0 开始慢慢长大</strong>，量子贡献从"无"平滑引入；骨干网络用 1/100 的学习率（1e-5）微冻配合，量子分支和分类头正常学习（1e-3）。</p>
+  </div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-num">03</span><h2>量子电路内部长什么样</h2></div>
+  <p class="sec-lead">以 Q/K 电路为例（4 qubit）。数据通过旋转门<strong>编码</strong>进去，可训练旋转门组成 <strong>ansatz</strong>（量子版"网络层"），CNOT 环负责纠缠，最后测量 Pauli-Z 读出：</p>
+
+  <div class="circuit">
+    <svg viewBox="0 0 900 320" font-family="IBM Plex Mono, monospace">
+      <!-- qubit wires -->
+      <g stroke="var(--line-strong)" stroke-width="1.5">
+        <line x1="96" y1="60" x2="870" y2="60"/>
+        <line x1="96" y1="130" x2="870" y2="130"/>
+        <line x1="96" y1="200" x2="870" y2="200"/>
+        <line x1="96" y1="270" x2="870" y2="270"/>
+      </g>
+      <g font-size="12" fill="var(--faint)">
+        <text x="30" y="64">q0 |0⟩</text>
+        <text x="30" y="134">q1 |0⟩</text>
+        <text x="30" y="204">q2 |0⟩</text>
+        <text x="30" y="274">q3 |0⟩</text>
+      </g>
+
+      <!-- encoding block bracket -->
+      <rect x="112" y="28" width="470" height="280" rx="10" fill="var(--amber-soft)" stroke="var(--amber-line)" stroke-dasharray="5 4" stroke-width="1.2"/>
+      <text x="126" y="48" font-size="12" fill="var(--amber)" font-weight="600">编码 ×3 轮 + 补一层 RX —— data re-uploading（数据门，无可训练参数）</text>
+
+      <!-- ansatz block -->
+      <rect x="600" y="28" width="218" height="280" rx="10" fill="var(--quantum-soft)" stroke="var(--quantum-line)" stroke-dasharray="5 4" stroke-width="1.2"/>
+      <text x="614" y="48" font-size="12" fill="var(--quantum)" font-weight="600">ansatz（可训练 θ，16 个参数）</text>
+
+      <!-- gate generator: rounds of RX,RY at x positions -->
+      <!-- round columns: rx=150,230,310 ; ry=185,265,345 ; ent=215,295,375 ; extra rx=410 ; then big gap -->
+      <g font-size="11" font-weight="600" text-anchor="middle">
+        <!-- RX data gates (amber) -->
+        <g fill="var(--amber)">
+          <!-- r1 -->
+          <rect x="138" y="47" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="151" y="64" fill="var(--amber)">RX</text>
+          <rect x="138" y="117" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="151" y="134" fill="var(--amber)">RX</text>
+          <rect x="138" y="187" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="151" y="204" fill="var(--amber)">RX</text>
+          <rect x="138" y="257" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="151" y="274" fill="var(--amber)">RX</text>
+          <!-- r2 -->
+          <rect x="218" y="47" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="231" y="64" fill="var(--amber)">RX</text>
+          <rect x="218" y="117" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="231" y="134" fill="var(--amber)">RX</text>
+          <rect x="218" y="187" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="231" y="204" fill="var(--amber)">RX</text>
+          <rect x="218" y="257" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="231" y="274" fill="var(--amber)">RX</text>
+          <!-- r3 -->
+          <rect x="298" y="47" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="311" y="64" fill="var(--amber)">RX</text>
+          <rect x="298" y="117" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="311" y="134" fill="var(--amber)">RX</text>
+          <rect x="298" y="187" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="311" y="204" fill="var(--amber)">RX</text>
+          <rect x="298" y="257" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="311" y="274" fill="var(--amber)">RX</text>
+          <!-- extra rx layer -->
+          <rect x="378" y="47" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="391" y="64" fill="var(--amber)">RX</text>
+          <rect x="378" y="117" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="391" y="134" fill="var(--amber)">RX</text>
+          <rect x="378" y="187" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="391" y="204" fill="var(--amber)">RX</text>
+          <rect x="378" y="257" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="391" y="274" fill="var(--amber)">RX</text>
+        </g>
+        <!-- RY data gates -->
+        <g>
+          <rect x="171" y="47" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="184" y="64" fill="var(--amber)">RY</text>
+          <rect x="171" y="117" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="184" y="134" fill="var(--amber)">RY</text>
+          <rect x="171" y="187" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="184" y="204" fill="var(--amber)">RY</text>
+          <rect x="171" y="257" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="184" y="274" fill="var(--amber)">RY</text>
+          <rect x="251" y="47" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="264" y="64" fill="var(--amber)">RY</text>
+          <rect x="251" y="117" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="264" y="134" fill="var(--amber)">RY</text>
+          <rect x="251" y="187" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="264" y="204" fill="var(--amber)">RY</text>
+          <rect x="251" y="257" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="264" y="274" fill="var(--amber)">RY</text>
+          <rect x="331" y="47" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="344" y="64" fill="var(--amber)">RY</text>
+          <rect x="331" y="117" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="344" y="134" fill="var(--amber)">RY</text>
+          <rect x="331" y="187" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="344" y="204" fill="var(--amber)">RY</text>
+          <rect x="331" y="257" width="26" height="26" rx="5" fill="var(--surface)" stroke="var(--amber-line)"/><text x="344" y="274" fill="var(--amber)">RY</text>
+        </g>
+        <!-- CNOT ring columns (encoders): cx = 215, 295, 375 (wait reorder: rx150 ry184 ent216 | rx230 ry264 ent296 | rx310 ry344 ent376 ; extra rx 430?) -->
+      </g>
+      <!-- entangle rings (3) at cx=216? adjust: gates rx center 151, ry 184 -> ring cx 216? but next rx at 231 collides. Use cx 210 -->
+      <g stroke="var(--amber)" stroke-width="1.6" fill="var(--amber)">
+        <!-- ring 1 cx=212 -->
+        <line x1="212" y1="60" x2="212" y2="270" stroke-dasharray="3 3"/>
+        <circle cx="212" cy="60" r="3.5"/><circle cx="212" cy="270" r="3.5"/>
+        <circle cx="212" cy="130" r="3.5"/><circle cx="212" cy="200" r="3.5"/>
+        <!-- ring 2 cx=292 -->
+        <line x1="292" y1="60" x2="292" y2="270" stroke-dasharray="3 3"/>
+        <circle cx="292" cy="60" r="3.5"/><circle cx="292" cy="270" r="3.5"/>
+        <circle cx="292" cy="130" r="3.5"/><circle cx="292" cy="200" r="3.5"/>
+        <!-- ring 3 cx=372 -->
+        <line x1="372" y1="60" x2="372" y2="270" stroke-dasharray="3 3"/>
+        <circle cx="372" cy="60" r="3.5"/><circle cx="372" cy="270" r="3.5"/>
+        <circle cx="372" cy="130" r="3.5"/><circle cx="372" cy="200" r="3.5"/>
+      </g>
+      <text x="292" y="300" font-size="10.5" fill="var(--faint)" text-anchor="middle">CNOT ring（环形纠缠 0-1-2-3-0）</text>
+
+      <!-- ansatz trainable gates: RX θ at 630, RY θ at 668, ring at 700, RX at 738, RY at 776, custom cnot at 810 -->
+      <g font-size="11" font-weight="600" text-anchor="middle">
+        <rect x="617" y="47" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="630" y="64" fill="#fff">RX</text>
+        <rect x="617" y="117" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="630" y="134" fill="#fff">RX</text>
+        <rect x="617" y="187" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="630" y="204" fill="#fff">RX</text>
+        <rect x="617" y="257" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="630" y="274" fill="#fff">RX</text>
+        <rect x="655" y="47" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="668" y="64" fill="#fff">RY</text>
+        <rect x="655" y="117" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="668" y="134" fill="#fff">RY</text>
+        <rect x="655" y="187" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="668" y="204" fill="#fff">RY</text>
+        <rect x="655" y="257" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="668" y="274" fill="#fff">RY</text>
+        <rect x="725" y="47" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="738" y="64" fill="#fff">RX</text>
+        <rect x="725" y="117" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="738" y="134" fill="#fff">RX</text>
+        <rect x="725" y="187" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="738" y="204" fill="#fff">RX</text>
+        <rect x="725" y="257" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="738" y="274" fill="#fff">RX</text>
+        <rect x="763" y="47" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="776" y="64" fill="#fff">RY</text>
+        <rect x="763" y="117" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="776" y="134" fill="#fff">RY</text>
+        <rect x="763" y="187" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="776" y="204" fill="#fff">RY</text>
+        <rect x="763" y="257" width="26" height="26" rx="5" fill="var(--quantum)" stroke="none"/><text x="776" y="274" fill="#fff">RY</text>
+      </g>
+      <!-- ansatz ring cx=700 -->
+      <g stroke="var(--quantum)" stroke-width="1.6" fill="var(--quantum)">
+        <line x1="700" y1="60" x2="700" y2="270" stroke-dasharray="3 3"/>
+        <circle cx="700" cy="60" r="3.5"/><circle cx="700" cy="270" r="3.5"/>
+        <circle cx="700" cy="130" r="3.5"/><circle cx="700" cy="200" r="3.5"/>
+      </g>
+      <!-- custom CNOTs cx=812: 3->2, 2->0, 1->0 : draw dots and crosses -->
+      <g stroke="var(--quantum)" stroke-width="1.6" fill="var(--quantum)">
+        <line x1="806" y1="200" x2="806" y2="270"/>
+        <circle cx="806" cy="270" r="3.5"/>
+        <circle cx="806" cy="200" r="7" fill="var(--surface)"/>
+        <line x1="812" y1="60" x2="812" y2="200"/>
+        <circle cx="812" cy="200" r="3.5"/>
+        <circle cx="812" cy="60" r="7" fill="var(--surface)"/>
+        <line x1="818" y1="60" x2="818" y2="130"/>
+        <circle cx="818" cy="130" r="3.5"/>
+        <circle cx="818" cy="60" r="7" fill="var(--surface)"/>
+      </g>
+      <text x="812" y="300" font-size="10.5" fill="var(--faint)" text-anchor="middle">定制 CNOT ×3</text>
+
+      <!-- measurement: Q/K measure q0 only -->
+      <g>
+        <circle cx="852" cy="60" r="13" fill="var(--surface)" stroke="var(--quantum)" stroke-width="2"/>
+        <line x1="845" y1="67" x2="858" y2="53" stroke="var(--quantum)" stroke-width="2"/>
+        <text x="852" y="92" font-size="11" fill="var(--quantum)" text-anchor="middle" font-weight="600">⟨Z₀⟩</text>
+        <!-- faded meters on other wires for V -->
+        <circle cx="852" cy="130" r="13" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="852" cy="200" r="13" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="852" cy="270" r="13" fill="none" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="3 3"/>
+      </g>
+      <text x="700" y="318" font-size="10.5" fill="var(--faint)" text-anchor="middle"></text>
+    </svg>
+    <div class="circuit-legend">
+      <span><span class="legend-dot" style="background:var(--amber)"></span>数据门 RX/RY（角度 = 输入特征，无可训练参数）</span>
+      <span><span class="legend-dot" style="background:var(--quantum)"></span>可训练门 RX/RY(θ)（θ 由 Adam 学习）</span>
+      <span><span class="legend-dot" style="background:var(--faint)"></span>虚线仪表 = V 电路在此测量全部 4 个 qubit</span>
+    </div>
+  </div>
+
+  <div class="grid3" style="margin-top:16px">
+    <div class="card">
+      <h3 style="margin-top:0">Q / K 电路</h3>
+      <p style="font-size:14px">编码 3 轮（RX+RY+CNOT 环）再补一层 RX；ansatz 16 个 θ；<strong>只测 q0 的 Pauli-Z</strong>，各读出 <strong>1 个标量</strong>。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">V 电路</h3>
+      <p style="font-size:14px">编码单层 RX+RY+RZ；ansatz 更宽（<strong>24 个 θ</strong>）；<strong>4 个 qubit 全测</strong>，读出 4 维向量——V 携带被聚合的内容。</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">量子参数总账</h3>
+      <p class="mono" style="font-size:13.5px; line-height:2">16 (Q) + 16 (K) + 24 (V)<br>= 56 电路参数<br>+ τ / enc_q / enc_v 3 个标量<br>= <span style="color:var(--quantum);font-weight:700;font-size:16px">59 个量子参数</span></p>
+    </div>
+  </div>
+  <p style="margin-top:14px; font-size:14px; color:var(--muted)">投影层 <code>Linear(128→4)</code> / <code>Linear(4→128)</code> 是经典线性层（516 + 640 参数）；输入角度还要过 <code>tanh·π</code> 限幅到 [−π, π]，并乘可学习缩放系数 enc_q / enc_v。</p>
+</section>
+
+<!-- ============ 4 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-num">04</span><h2>注意力权重是怎么算出来的</h2></div>
+  <p class="sec-lead">和标准 self-attention 一模一样的三步，只是 Q/K/V 从"线性层输出"换成"量子电路测量值"：</p>
+
+  <div class="formula">
+    <div><span class="cm"># 每个时间步 i：量子电路读出（v1 版本）</span></div>
+    <div>q_i = <span class="iv">QCircuit(x_i)</span> ∈ [−1,1]　　k_i = <span class="iv">KCircuit(x_i)</span> ∈ [−1,1]　　v_i = <span class="iv">VCircuit(x_i)</span> ∈ [−1,1]⁴</div>
+    <div style="margin-top:8px"><span class="cm"># 和经典 attention 同构：打分 → softmax → 加权求和</span></div>
+    <div>s_ij = softmax_j( <span class="av">τ</span> · q_i · k_j )　　　　out_i = Σ_j s_ij · v_j</div>
+    <div style="margin-top:8px"><span class="cm"># 投回 128 维，残差加回（γ 是门控标量）</span></div>
+    <div>h = LayerNorm( <span class="av">γ</span> · Linear₄→₁₂₈(out) + x )</div>
+  </div>
+
+  <div class="grid2" style="margin-top:16px">
+    <div class="card">
+      <h3 style="margin-top:0">和经典 attention 的对应关系</h3>
+      <table>
+        <tbody>
+        <tr><td><strong>经典</strong>：Linear 投影出 Q/K/V 向量，点积衡量 token 相似度</td><td><strong>量子</strong>：电路把 4 维特征演化后测量出 Q/K/V，<span class="iv">量子态演化 + 纠缠</span>替代了矩阵乘法</td></tr>
+        <tr><td><strong>经典</strong>：softmax(QKᵀ/√d)</td><td><strong>量子</strong>：公式相同，多一个可学习温度 <span class="av">τ</span></td></tr>
+        <tr><td><strong>经典</strong>：残差 + LayerNorm</td><td><strong>量子</strong>：完全保留，外加 <span class="av">γ 零初始化门控</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">v1 的已知短板（v2 已修）</h3>
+      <p style="font-size:14px">v1 的 Q、K 各只读 <strong>1 个标量</strong>，注意力矩阵是"标量×标量"的<strong>低秩</strong>打分，更像全局时间重加权器而非真正的多头注意力。</p>
+      <p style="font-size:14px">v2（MHQSA）改为：<strong>Q/K/V 都测 4 维向量</strong> + <strong>2 个注意力头</strong> + 两层 data re-uploading，量子参数 59 → 72，成为真正意义上的向量点积注意力。</p>
+    </div>
+  </div>
+
+  <p style="margin-top:14px; font-size:14px; color:var(--muted)">另有 <span class="pill q">QCEA</span> 变体：不做时间注意力，而是在 GAP 后的 128 维通道向量上过量子电路，用 <code>2·sigmoid(·)</code> 生成近恒等的<strong>通道乘性门</strong>——量子版 SE，在多变量数据集上提升最大（RacketSports +3.95 pp）。</p>
+</section>
+
+<!-- ============ 5 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-num">05</span><h2>两阶段训练：三个病，三副药</h2></div>
+  <p class="sec-lead">直接把随机初始化的量子分支插进训练好的网络，精度会崩。实验中定位了三个具体病因，每个都有对应的结构/训练手段：</p>
+
+  <div class="grid3" style="margin-bottom:16px">
+    <div>
+      <div class="problem" style="border-left:4px solid var(--red);background:var(--red-soft);border-radius:10px;padding:16px 18px">
+        <h4 style="color:var(--red)">病 1：阶段转换休克</h4>
+        <p>骨干已学好特征，Phase 2 突然接入随机量子分支，其输出是<strong>纯噪声</strong>，残差一加直接覆盖好特征，分类头崩溃。</p>
+      </div>
+      <div class="solution" style="border-left:4px solid var(--green);background:var(--green-soft);border-radius:0 0 10px 10px;padding:16px 18px; margin-top:-6px">
+        <h4 style="color:var(--green)">药：γ 零初始化门控</h4>
+        <p><code>out = LN(γ·量子(x) + x)</code>，γ 初值 = 0 → 量子分支初始贡献严格为 0，模型<strong>起点就是纯经典 FCN</strong>，γ 训练中慢慢长大，量子只做"加分项"。ResNet 式零初始化思路。</p>
+      </div>
+    </div>
+    <div>
+      <div class="problem" style="border-left:4px solid var(--red);background:var(--red-soft);border-radius:10px;padding:16px 18px">
+        <h4 style="color:var(--red)">病 2：注意力坍缩</h4>
+        <p>测量值锁死在 [−1,1]，标量点积 logits 只有 [−2,2]，在 softmax 眼里<strong>太小</strong> → 权重接近均匀分布，退化成平均池化，时间特征被抹平。</p>
+      </div>
+      <div class="solution" style="border-left:4px solid var(--green);background:var(--green-soft);border-radius:0 0 10px 10px;padding:16px 18px; margin-top:-6px">
+        <h4 style="color:var(--green)">药：可学习温度 τ（初值 5.0）</h4>
+        <p><code>softmax(τ·qk/√d)</code>，τ 放大 logits 让注意力能变尖峰。<strong>拖下面的滑块直观感受</strong> ↓</p>
+      </div>
+    </div>
+    <div>
+      <div class="problem" style="border-left:4px solid var(--red);background:var(--red-soft);border-radius:10px;padding:16px 18px">
+        <h4 style="color:var(--red)">病 3：冻结骨干不配合</h4>
+        <p>硬冻结卷积层后，特征分布是朝"没有量子层"优化的，大量值饱和在 tanh 边缘，量子电路吃不到合适输入。</p>
+      </div>
+      <div class="solution" style="border-left:4px solid var(--green);background:var(--green-soft);border-radius:0 0 10px 10px;padding:16px 18px; margin-top:-6px">
+        <h4 style="color:var(--green)">药：差分学习率微调</h4>
+        <p>不硬冻结：骨干 <code>lr=1e-5</code>（1/100，保护已学特征又允许迎合量子输入），量子分支 + 分类头 <code>lr=1e-3</code>。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tau-panel">
+    <div>
+      <h3 style="margin-top:0">温度系数 τ 交互演示</h3>
+      <p style="font-size:14px">同一组量子读出的 q、k 值，只改 τ：6 个时间步之间的注意力权重分布（行 = query，列 = key）。</p>
+      <div class="heat-wrap"><div class="heat-grid" id="heat"></div></div>
+      <div class="heat-axis">→ key 时间步（每行权重和为 1）</div>
+    </div>
+    <div class="tau-controls">
+      <div style="font-size:13px;color:var(--muted)">可学习温度 τ</div>
+      <div class="tau-val" id="tau-val">1.0</div>
+      <input type="range" id="tau" min="0.2" max="8" step="0.1" value="1.0">
+      <div style="display:flex;justify-content:space-between;font-family:IBM Plex Mono;font-size:11px;color:var(--faint)"><span>0.2 太平</span><span>τ=5 初始化</span><span>8 尖峰</span></div>
+      <div class="tau-verdict flat" id="tau-verdict"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-num">06</span><h2>实验结果：1/30 的参数，打赢了谁</h2></div>
+  <p class="sec-lead">所有对比走同一套两阶段协议；"同参经典对照"与量子分支同构（同样 128→4 压缩、标量 Q/K、softmax、残差），参数量 67 vs 59，把提升干净地归因到量子线路本身。</p>
+
+  <h3>注意力模块参数量对比</h3>
+  <div class="card">
+    <div class="res-bars">
+      <div class="bar-row">
+        <span><span class="pill q">Qatt</span></span>
+        <div class="bar-track"><div class="bar-fill q" style="width:3%">59</div></div>
+        <span class="mono" style="font-size:13px"><strong>59</strong> 个</span>
+      </div>
+      <div class="bar-row">
+        <span><span class="pill c">SE 通道注意力</span></span>
+        <div class="bar-track"><div class="bar-fill c" style="width:100%">2048</div></div>
+        <span class="mono" style="font-size:13px">2,048 个</span>
+      </div>
+      <div class="bar-row">
+        <span><span class="pill c">CBAM 通道+空间</span></span>
+        <div class="bar-track"><div class="bar-fill c" style="width:100%">2062</div></div>
+        <span class="mono" style="font-size:13px">2,062 个</span>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-top:12px;margin-bottom:0">Qatt 参数约为经典注意力的 <strong>1/30（↓97%）</strong>；全模型仍含 ~26.6 万经典骨干参数（FCN + 投影层）。</p>
+  </div>
+
+  <h3>ECGFiveDays（主数据集，23 训练 / 861 测试）</h3>
+  <div class="card" style="padding:6px 24px">
+    <table>
+      <thead><tr><th>模型</th><th>Accuracy</th><th>vs 量子最强</th></tr></thead>
+      <tbody>
+        <tr><td>同参经典注意力（最公平对照，冻结）</td><td class="mono">88.7%</td><td class="lose">−7.8 pp</td></tr>
+        <tr><td>纯 FCN，两阶段冻结</td><td class="mono">90.9%</td><td class="lose">−5.6 pp</td></tr>
+        <tr><td>纯 FCN，端到端无冻结</td><td class="mono">92.2%</td><td class="lose">−4.2 pp</td></tr>
+        <tr><td><span class="pill q">FQN 量子</span> 联合训练</td><td class="mono"><strong>96.4%</strong></td><td>—</td></tr>
+        <tr><td><span class="pill q">FQN 量子</span> 两阶段训练</td><td class="mono"><strong>96.5%</strong>（Phase2 最高 97.7%）</td><td class="win">最佳</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>对 SE / CBAM：5 个 UCR 数据集</h3>
+  <div class="card" style="padding:6px 24px">
+    <table>
+      <thead><tr><th>数据集</th><th>FCN+SE</th><th>FCN+CBAM</th><th>FQN 量子</th><th>量子 vs CBAM</th></tr></thead>
+      <tbody>
+        <tr><td>TwoLeadECG</td><td class="mono">99.9%</td><td class="mono">99.9%</td><td class="mono">99.9%</td><td>平</td></tr>
+        <tr><td>ECG200</td><td class="mono"><strong>89.0%</strong></td><td class="mono">85.0%</td><td class="mono">88.0%</td><td class="win">+3.0 pp</td></tr>
+        <tr><td>ItalyPowerDemand</td><td class="mono">95.5%</td><td class="mono">95.8%</td><td class="mono"><strong>96.2%</strong></td><td class="win">+0.4 pp</td></tr>
+        <tr><td>GunPoint</td><td class="mono"><strong>100%</strong></td><td class="mono">97.3%</td><td class="mono">99.3%</td><td class="win">+2.0 pp</td></tr>
+        <tr><td>SonyAIBORobotSurface1</td><td class="mono">96.8%</td><td class="mono">96.5%</td><td class="mono"><strong>97.0%</strong></td><td class="win">+0.5 pp</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13.5px;margin:10px 0 12px">对 <strong>CBAM 4 胜 1 平稳定超越</strong>；对 SE 2 胜 2 负 1 平、互有胜负。多变量集（UEA）上 QCEA 对 FCN 3 胜 1 平，RacketSports +4.0 pp、ERing +2.6 pp。</p>
+  </div>
+
+  <div class="card" style="margin-top:16px; border-color:var(--amber-line); background:var(--amber-soft)">
+    <p style="margin:0; font-size:14px"><strong>诚实的负面结果（消融价值）：</strong>few-shot（每类 1/3/5 样本从头训）15 组中量子 11 负——定位到小 batch 下 BatchNorm 抖动 + 128→4 强瓶颈 + 标量 Q/K 低秩三个原因，改进方案：GroupNorm 替代、Q/K 多维读出、拓宽投影（few-shot 版已实施）。v2 多头版在 ECGFiveDays 上也略低于 FCN（阶段转换未完全稳住），说明两阶段 + γ/τ 策略是 v1 成功的关键，而非"量子天然更强"。</p>
+  </div>
+
+  <div class="talk">
+    <h3>🎤 面试一句话版本</h3>
+    <p>"我在 FCN 骨干上设计了一个名为 Qatt 的 4-qubit 量子注意力模块，用 PennyLane 量子电路替代 Q/K/V 线性投影，整个注意力分支只有 59 个可训练参数——是 SE/CBAM 的 1/30。训练上我提出两阶段策略：先纯经典预热，再用零初始化 γ 门控保证量子分支从恒等映射平滑接入、可学习温度系数解决 Pauli-Z 读出导致的 softmax 坍缩、差分学习率让骨干配合微调。最终在 10 个 UCR/UEA 数据集上，量子注意力对 CBAM 4 胜 1 平，在参数量严格对齐的经典对照上提升 7.8 个百分点。"</p>
+  </div>
+</section>
+
+<div class="foot">Qatt · 基于量子时序分类实验代码与结果整理 · PennyLane default.qubit 模拟器 / PyTorch</div>
+
+</div>
+
+<script>
+function setPhase(p){
+  document.getElementById('pipeline').setAttribute('data-phase', p);
+  document.getElementById('btn-p1').className = 'pbtn' + (p===1 ? ' active-p1' : '');
+  document.getElementById('btn-p2').className = 'pbtn' + (p===2 ? ' active-p2' : '');
+  document.getElementById('desc-p1').classList.toggle('show', p===1);
+  document.getElementById('desc-p2').classList.toggle('show', p===2);
+}
+
+// temperature / softmax heatmap demo
+var q = [0.82, 0.15, -0.55, 0.90, -0.28, 0.10];
+var k = [0.70, 0.30, -0.45, 0.85, -0.60, 0.25];
+var grid = document.getElementById('heat');
+var cells = [];
+for(var i=0;i<6;i++){
+  for(var j=0;j<6;j++){
+    var d = document.createElement('div');
+    d.className = 'heat-cell';
+    grid.appendChild(d);
+    cells.push(d);
+  }
+}
+function softmax(arr){
+  var m = Math.max.apply(null, arr), s = 0, out = [];
+  for(var i=0;i<arr.length;i++){ var e = Math.exp(arr[i]-m); out.push(e); s += e; }
+  return out.map(function(v){ return v/s; });
+}
+function renderTau(){
+  var tau = parseFloat(document.getElementById('tau').value);
+  document.getElementById('tau-val').textContent = tau.toFixed(1);
+  var maxW = 0;
+  for(var i=0;i<6;i++){
+    var logits = [];
+    for(var j=0;j<6;j++) logits.push(tau * q[i] * k[j]);
+    var w = softmax(logits);
+    for(var j=0;j<6;j++){
+      var c = cells[i*6+j];
+      var v = w[j];
+      if(v > maxW) maxW = v;
+      var alpha = Math.min(1, v*2.2);
+      c.style.background = 'rgba(106,72,229,' + alpha.toFixed(3) + ')';
+      c.textContent = v > 0.12 ? v.toFixed(2) : '';
+      c.style.color = alpha > 0.55 ? '#fff' : 'var(--ink)';
+    }
+  }
+  var verdict = document.getElementById('tau-verdict');
+  if(maxW < 0.24){
+    verdict.className = 'tau-verdict flat';
+    verdict.textContent = '⚠ 权重太平 ≈ 平均池化，注意力失效（这就是"注意力坍缩"）';
+  } else {
+    verdict.className = 'tau-verdict sharp';
+    verdict.textContent = '✓ 权重出现尖峰，注意力真正在"选择"关键时间步';
+  }
+}
+document.getElementById('tau').addEventListener('input', renderTau);
+renderTau();
+</script>
+</body>
+</html>
