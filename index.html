@@ -192,13 +192,43 @@
     }
 
     .hero {
-      padding: 112px 24px 72px;
+      position: relative;
+      min-height: 100svh;
+      padding: 88px 24px 36px;
+      display: grid;
+      align-items: center;
+      isolation: isolate;
+      overflow: hidden;
+      color: #f7f9ff;
+      background:
+        radial-gradient(ellipse at 18% 18%, rgba(64, 149, 255, .42), transparent 32%),
+        radial-gradient(ellipse at 82% 22%, rgba(138, 91, 255, .42), transparent 34%),
+        radial-gradient(ellipse at 52% 96%, rgba(45, 205, 190, .2), transparent 36%),
+        linear-gradient(145deg, #07101f 0%, #0c1634 48%, #17123b 100%);
       text-align: center;
     }
 
+    .galaxy-canvas {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
     .hero-inner {
-      width: min(1120px, 100%);
+      position: relative;
+      z-index: 1;
+      width: min(1080px, 100%);
       margin: 0 auto;
+      padding: clamp(48px, 6vw, 78px);
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: 38px;
+      background: rgba(9, 17, 39, .46);
+      box-shadow: 0 36px 110px rgba(0, 0, 0, .34), inset 0 1px rgba(255, 255, 255, .13);
+      backdrop-filter: blur(26px) saturate(145%);
+      -webkit-backdrop-filter: blur(26px) saturate(145%);
     }
 
     .eyebrow {
@@ -209,6 +239,8 @@
       letter-spacing: .1em;
       text-transform: uppercase;
     }
+
+    .hero .eyebrow { color: rgba(222, 231, 255, .7); }
 
     h1,
     h2,
@@ -224,10 +256,15 @@
       line-height: .9;
     }
 
+    .hero h1 {
+      color: #ffffff;
+      text-shadow: 0 8px 42px rgba(44, 85, 190, .22);
+    }
+
     .hero-copy {
       max-width: 720px;
       margin: 0 auto;
-      color: var(--muted);
+      color: rgba(230, 235, 249, .76);
       font-size: clamp(20px, 2vw, 28px);
       letter-spacing: -.025em;
       line-height: 1.35;
@@ -255,13 +292,31 @@
     }
 
     .text-link:hover::after { transform: translateX(3px); }
+    .hero .text-link { color: #f5f8ff; }
+
+    .hero .actions .text-link:first-child {
+      padding: 10px 17px;
+      border: 1px solid rgba(255, 255, 255, .19);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .1);
+    }
+
+    .hero .text-link:focus-visible {
+      outline: 2px solid #a9d5ff;
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
 
     .product-stage {
       width: min(940px, 100%);
-      margin: 88px auto 0;
-      padding: clamp(40px, 7vw, 82px);
-      border-radius: 22px;
-      background: var(--surface);
+      margin: 64px auto 0;
+      padding: clamp(34px, 5vw, 60px);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .075);
+      box-shadow: inset 0 1px rgba(255, 255, 255, .08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
     .loop {
@@ -270,6 +325,7 @@
       align-items: center;
       justify-content: center;
       gap: clamp(10px, 2vw, 28px);
+      color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
       font-size: clamp(22px, 4vw, 46px);
       font-weight: 620;
@@ -277,10 +333,9 @@
     }
 
     .loop .arrow {
-      color: var(--line);
+      color: rgba(210, 224, 255, .42);
       font-weight: 400;
     }
-
     .statement {
       padding: 160px 24px;
       background: var(--dark);
@@ -619,13 +674,23 @@
       .nav-links a:first-child { display: none; }
       .nav-links { gap: 18px; }
 
-      .hero { padding-inline: 18px; }
+      .hero {
+        min-height: 100svh;
+        padding: 76px 12px 18px;
+      }
+
       h1 { font-size: clamp(56px, 18vw, 88px); }
       .hero-copy { font-size: 20px; }
-      .product-stage { margin-top: 64px; }
-      .loop { grid-template-columns: 1fr; gap: 12px; }
-      .loop .arrow { transform: rotate(90deg); }
 
+      .hero-inner {
+        padding: 44px 18px 28px;
+        border-radius: 28px;
+      }
+
+      .hero .actions { gap: 16px; }
+      .hero .product-stage { margin-top: 44px; padding: 26px 12px; }
+      .hero .loop { grid-template-columns: repeat(5, auto); gap: 7px; font-size: 18px; }
+      .hero .loop .arrow { transform: none; }
       .statement,
       .project,
       .closing { min-height: auto; }
@@ -659,6 +724,19 @@
         transition: none;
       }
     }
+    @media (prefers-reduced-transparency: reduce) {
+      .hero-inner,
+      .product-stage {
+        background: rgba(8, 16, 36, .94);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+    }
+
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      .hero-inner { background: rgba(8, 16, 36, .9); }
+      .product-stage { background: rgba(255, 255, 255, .1); }
+    }
   </style>
 </head>
 <body>
@@ -676,6 +754,7 @@
 
   <main id="top">
     <section class="hero">
+      <canvas class="galaxy-canvas" id="galaxy" aria-hidden="true"></canvas>
       <div class="hero-inner reveal">
         <p class="eyebrow">PeaceMaker · Agent Engineering</p>
         <h1>Make agents<br>useful.</h1>
@@ -857,6 +936,131 @@
     }, { threshold: 0.16 });
 
     document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+    (() => {
+      const canvas = document.getElementById('galaxy');
+      const hero = canvas.closest('.hero');
+      const context = canvas.getContext('2d', { alpha: true });
+      if (!context) return;
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const frameInterval = 1000 / 28;
+      const tau = Math.PI * 2;
+
+      let width = 0;
+      let height = 0;
+      let stars = [];
+      let heroVisible = true;
+      let frameId = 0;
+      let lastFrame = 0;
+      let resizeQueued = false;
+
+      const makeStars = (count) => Array.from({ length: count }, () => ({
+        angle: Math.random() * tau,
+        radius: .04 + Math.pow(Math.random(), .72) * .7,
+        speed: (.000004 + Math.random() * .000009) * (Math.random() > .5 ? 1 : -1),
+        size: .55 + Math.random() * 1.3,
+        alpha: .34 + Math.random() * .58,
+        phase: Math.random() * tau,
+        twinkle: .00055 + Math.random() * .0011,
+        color: Math.random() > .78 ? '#b9d9ff' : Math.random() > .72 ? '#d8c8ff' : '#ffffff'
+      }));
+
+      const draw = (time) => {
+        context.clearRect(0, 0, width, height);
+        const centerX = width * .58;
+        const centerY = height * .47;
+
+        for (const star of stars) {
+          const angle = star.angle + time * star.speed;
+          const orbitX = width * (.08 + star.radius * .7);
+          const orbitY = height * (.06 + star.radius * .42);
+          const x = centerX + Math.cos(angle) * orbitX;
+          const y = centerY + Math.sin(angle) * orbitY;
+
+          if (x < -4 || x > width + 4 || y < -4 || y > height + 4) continue;
+
+          context.globalAlpha = star.alpha * (.78 + Math.sin(time * star.twinkle + star.phase) * .22);
+          context.fillStyle = star.color;
+          context.beginPath();
+          context.arc(x, y, star.size, 0, tau);
+          context.fill();
+        }
+
+        context.globalAlpha = 1;
+      };
+
+      const resize = () => {
+        const nextWidth = Math.max(1, Math.round(hero.clientWidth));
+        const nextHeight = Math.max(1, Math.round(hero.clientHeight));
+        if (nextWidth === width && nextHeight === height) return;
+
+        width = nextWidth;
+        height = nextHeight;
+        const mobile = width < 640;
+        const dpr = mobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.35);
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        context.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const areaCount = Math.round((width * height) / 19000);
+        stars = makeStars(Math.min(mobile ? 34 : 68, Math.max(24, areaCount)));
+        draw(0);
+      };
+
+      const shouldAnimate = () => heroVisible && !document.hidden && !reducedMotion.matches;
+
+      const tick = (time) => {
+        frameId = 0;
+        if (!shouldAnimate()) return;
+
+        if (!lastFrame || time - lastFrame >= frameInterval) {
+          draw(time);
+          lastFrame = time;
+        }
+
+        frameId = requestAnimationFrame(tick);
+      };
+
+      const syncAnimation = () => {
+        const active = shouldAnimate();
+        canvas.dataset.animation = active ? 'running' : 'paused';
+
+        if (active && !frameId) {
+          lastFrame = 0;
+          frameId = requestAnimationFrame(tick);
+        } else if (!active && frameId) {
+          cancelAnimationFrame(frameId);
+          frameId = 0;
+        }
+
+        if (!active) draw(0);
+      };
+
+      const queueResize = () => {
+        if (resizeQueued) return;
+        resizeQueued = true;
+        requestAnimationFrame(() => {
+          resizeQueued = false;
+          resize();
+          syncAnimation();
+        });
+      };
+
+      if ('ResizeObserver' in window) new ResizeObserver(queueResize).observe(hero);
+      else window.addEventListener('resize', queueResize, { passive: true });
+
+      new IntersectionObserver(([entry]) => {
+        heroVisible = entry.isIntersecting;
+        syncAnimation();
+      }, { threshold: .02 }).observe(hero);
+
+      document.addEventListener('visibilitychange', syncAnimation);
+      if (reducedMotion.addEventListener) reducedMotion.addEventListener('change', syncAnimation);
+      else reducedMotion.addListener(syncAnimation);
+
+      resize();
+      syncAnimation();
+    })();
   </script>
 </body>
 </html>
