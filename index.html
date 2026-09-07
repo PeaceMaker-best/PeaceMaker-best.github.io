@@ -311,24 +311,31 @@
     }
 
     .project {
-      padding: 140px 24px;
+      min-height: 100svh;
+      padding: 132px 24px;
       border-bottom: 1px solid var(--line);
+      display: grid;
+      align-items: center;
+      overflow: hidden;
     }
 
     .project.soft { background: var(--surface); }
     .project.white { background: var(--paper); }
 
     .project-inner {
-      width: min(1040px, 100%);
+      width: min(1180px, 100%);
       margin: 0 auto;
       display: grid;
-      grid-template-columns: minmax(0, .84fr) minmax(360px, 1.16fr);
-      gap: clamp(64px, 9vw, 128px);
+      grid-template-columns: minmax(300px, .72fr) minmax(0, 1.48fr);
+      gap: clamp(54px, 7vw, 104px);
       align-items: center;
     }
 
     .project:nth-of-type(even) .project-copy { order: 2; }
     .project:nth-of-type(even) .project-visual { order: 1; }
+    .project:nth-of-type(even) .project-inner {
+      grid-template-columns: minmax(0, 1.48fr) minmax(300px, .72fr);
+    }
 
     .project-index {
       margin-bottom: 18px;
@@ -348,52 +355,214 @@
     }
 
     .project-copy > p {
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       color: var(--muted);
       font-size: 20px;
       line-height: 1.48;
       letter-spacing: -.02em;
     }
 
+    .project-tags,
+    .project-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .project-tags { margin: 0 0 30px; }
+
+    .project-tag {
+      padding: 7px 11px;
+      border: 1px solid rgba(0, 0, 0, .08);
+      border-radius: 999px;
+      color: #515154;
+      background: rgba(255, 255, 255, .66);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -.01em;
+    }
+
+    .project-note {
+      display: block;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .project-note a { color: inherit; }
+
+    .private-label {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 10px;
+      border: 1px solid rgba(0, 0, 0, .1);
+      border-radius: 999px;
+      color: #515154;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
     .project-visual {
-      min-height: 520px;
-      border-radius: 22px;
+      min-height: 500px;
+      padding: clamp(30px, 4vw, 56px);
+      border: 1px solid rgba(0, 0, 0, .05);
+      border-radius: 34px;
       display: grid;
       place-items: center;
       overflow: hidden;
-      background: var(--paper);
+      background:
+        radial-gradient(circle at 88% 10%, rgba(77, 124, 255, .22), transparent 32%),
+        linear-gradient(145deg, #eaf2ff 0%, #d7e4ff 48%, #eff5ff 100%);
+      box-shadow: inset 0 1px rgba(255, 255, 255, .7);
     }
 
-    .white .project-visual { background: var(--surface); }
+    .buffett-visual {
+      background:
+        radial-gradient(circle at 14% 92%, rgba(255, 171, 64, .3), transparent 34%),
+        radial-gradient(circle at 90% 10%, rgba(76, 116, 255, .22), transparent 32%),
+        linear-gradient(145deg, #fff2dd 0%, #f7e8da 45%, #e9efff 100%);
+    }
 
-    .visual-type {
-      position: relative;
-      width: 78%;
-      aspect-ratio: 1;
-      border: 1px solid var(--line);
-      border-radius: 50%;
+    .pocket-visual {
+      background:
+        radial-gradient(circle at 90% 14%, rgba(36, 205, 164, .24), transparent 34%),
+        linear-gradient(145deg, #edf9f4 0%, #dcefe8 54%, #f5faf7 100%);
+    }
+
+    .browser-frame {
+      width: 100%;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, .12);
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 28px 70px rgba(26, 39, 67, .2), 0 2px 8px rgba(0, 0, 0, .08);
+      transform: perspective(1400px) rotateX(1deg) rotateY(-1.5deg);
+      transition: transform 480ms var(--ease), box-shadow 480ms var(--ease);
+    }
+
+    .project:nth-of-type(even) .browser-frame {
+      transform: perspective(1400px) rotateX(1deg) rotateY(1.5deg);
+    }
+
+    .project:hover .browser-frame {
+      transform: perspective(1400px) rotateX(0) rotateY(0) translateY(-7px);
+      box-shadow: 0 38px 86px rgba(26, 39, 67, .25), 0 3px 10px rgba(0, 0, 0, .08);
+    }
+
+    .browser-bar {
+      min-height: 39px;
+      padding: 0 13px;
+      border-bottom: 1px solid rgba(0, 0, 0, .08);
       display: grid;
-      place-items: center;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-      font-size: clamp(64px, 9vw, 128px);
-      font-weight: 650;
-      letter-spacing: -.07em;
-      background: var(--paper);
+      grid-template-columns: 64px 1fr 64px;
+      align-items: center;
+      background: #fafafa;
     }
 
-    .visual-type::before,
-    .visual-type::after {
-      content: "";
-      position: absolute;
-      border: 1px solid var(--line);
+    .browser-dots { display: flex; gap: 6px; }
+
+    .browser-dots i {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
+      background: #d7d7dc;
     }
 
-    .visual-type::before { inset: 10%; }
-    .visual-type::after { inset: 22%; }
+    .browser-label {
+      overflow: hidden;
+      color: #8a8a8f;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .02em;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-    .visual-type span { position: relative; z-index: 1; }
+    .browser-frame img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      object-position: top;
+    }
 
+    .pocket-ui {
+      width: 100%;
+      min-height: 350px;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: 128px 1fr;
+      gap: 18px;
+      color: #17322c;
+      background: #fbfdfc;
+      font-size: 11px;
+    }
+
+    .pocket-side {
+      padding: 18px 12px;
+      border-radius: 14px;
+      color: rgba(255, 255, 255, .72);
+      background: #163b32;
+    }
+
+    .pocket-logo {
+      margin-bottom: 26px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .pocket-nav-item {
+      margin: 7px 0;
+      padding: 8px 9px;
+      border-radius: 8px;
+    }
+
+    .pocket-nav-item.active { color: #17322c; background: #bdf6df; }
+
+    .pocket-main h4 {
+      margin: 6px 0 5px;
+      font-size: 22px;
+      letter-spacing: -.04em;
+    }
+
+    .pocket-main > p { margin: 0 0 20px; color: #71837e; }
+
+    .status-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .status-card,
+    .routing-panel {
+      border: 1px solid #e2ebe7;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 7px 20px rgba(34, 75, 63, .06);
+    }
+
+    .status-card { padding: 14px; }
+    .status-card b { display: block; margin-top: 9px; font-size: 20px; }
+    .status-card span { color: #7e8d89; }
+    .routing-panel { padding: 16px; }
+    .route-head { display: flex; justify-content: space-between; margin-bottom: 13px; font-weight: 700; }
+
+    .route-row {
+      padding: 11px 0;
+      border-top: 1px solid #edf1ef;
+      display: grid;
+      grid-template-columns: 1fr .8fr auto;
+      align-items: center;
+      color: #60716c;
+    }
+
+    .healthy { color: #16865f; font-weight: 700; }
     .closing {
       padding: 160px 24px 80px;
       text-align: center;
@@ -464,10 +633,15 @@
       .statement { padding-block: 120px; }
       .project { padding-block: 110px; }
       .project-inner { grid-template-columns: 1fr; gap: 48px; }
+      .project:nth-of-type(even) .project-inner { grid-template-columns: 1fr; }
       .project:nth-of-type(even) .project-copy,
       .project:nth-of-type(even) .project-visual { order: initial; }
-      .project-visual { min-height: 360px; }
-      .visual-type { width: min(72%, 280px); }
+      .project-visual { min-height: 0; padding: 18px; border-radius: 24px; }
+      .browser-frame { transform: none !important; }
+      .pocket-ui { min-height: 310px; padding: 14px; grid-template-columns: 92px 1fr; gap: 12px; }
+      .pocket-side { padding-inline: 7px; }
+      .status-row { grid-template-columns: 1fr; }
+      .status-card:nth-child(n+2) { display: none; }
       .closing { padding-top: 120px; }
 
       footer {
@@ -521,7 +695,7 @@
     <section class="statement" id="vision">
       <div class="statement-inner reveal">
         <p class="eyebrow">The big vision</p>
-        <h2>Agent 还有很多<br>没做完。</h2>
+        <h2>Agents are far<br>from finished.</h2>
         <p>Better planning. Real tools. Useful memory. Verifiable outcomes. The next generation of agents should do more than respond — they should reliably get work done.</p>
       </div>
     </section>
@@ -530,13 +704,27 @@
       <section class="project soft">
         <div class="project-inner reveal">
           <div class="project-copy">
-            <p class="project-index">01 · Visual production</p>
-            <h3>NovaFrame</h3>
-            <p>A local-first AI visual production workspace designed for real e-commerce teams and repeatable creative workflows.</p>
-            <a class="text-link" href="https://github.com/PeaceMaker-best/NovaFrame" target="_blank" rel="noreferrer">View project</a>
+            <p class="project-index">01 · Agent workflow assurance</p>
+            <h3>WorkflowIR<br>Harness</h3>
+            <p>A deterministic assurance harness that turns generated Dify workflows into importable, executable, and verifiable artifacts.</p>
+            <div class="project-tags" aria-label="Project highlights">
+              <span class="project-tag">16 workflow tasks</span>
+              <span class="project-tag">14-node demo</span>
+              <span class="project-tag">Python · Dify</span>
+            </div>
+            <div class="project-links">
+              <a class="text-link" href="https://github.com/PeaceMaker-best/WorkflowIR-Harness" target="_blank" rel="noreferrer">View project</a>
+            </div>
           </div>
-          <div class="project-visual" aria-hidden="true">
-            <div class="visual-type"><span>N</span></div>
+          <div class="project-visual">
+            <div class="browser-frame">
+              <div class="browser-bar">
+                <span class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="browser-label">Generated workflow · Dify canvas</span>
+                <span></span>
+              </div>
+              <img src="./assets/projects/workflowir-canvas.png" alt="A generated multi-node workflow running in the Dify canvas">
+            </div>
           </div>
         </div>
       </section>
@@ -544,13 +732,29 @@
       <section class="project white">
         <div class="project-inner reveal">
           <div class="project-copy">
-            <p class="project-index">02 · Model infrastructure</p>
-            <h3>PocketModel</h3>
-            <p>A themed, reliability-focused self-hosted LLM gateway for Anthropic and OpenAI-compatible workflows.</p>
-            <a class="text-link" href="https://github.com/PeaceMaker-best/PocketModel" target="_blank" rel="noreferrer">View project</a>
+            <p class="project-index">02 · Quantitative research</p>
+            <h3>Buffett</h3>
+            <p>A personal quantitative-research workspace that turns natural-language questions into stock screening, backtests, evidence, and interactive dashboards.</p>
+            <div class="project-tags" aria-label="Project highlights">
+              <span class="project-tag">Data Agent</span>
+              <span class="project-tag">Backtesting</span>
+              <span class="project-tag">Next.js · Python</span>
+            </div>
+            <div class="project-links">
+              <a class="text-link" href="https://github.com/PeaceMaker-best/QuantPilot" target="_blank" rel="noreferrer">View project</a>
+              <a class="text-link" href="https://github.com/tiammomo/QuantPilot" target="_blank" rel="noreferrer">Upstream</a>
+            </div>
+            <small class="project-note">Portfolio build based on <a href="https://github.com/tiammomo/QuantPilot" target="_blank" rel="noreferrer">tiammomo/QuantPilot</a> · MIT.</small>
           </div>
-          <div class="project-visual" aria-hidden="true">
-            <div class="visual-type"><span>P</span></div>
+          <div class="project-visual buffett-visual">
+            <div class="browser-frame">
+              <div class="browser-bar">
+                <span class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="browser-label">Buffett · Strategy platform</span>
+                <span></span>
+              </div>
+              <img src="./assets/projects/buffett-strategy-platform.png" alt="QuantPilot strategy platform showing a quantitative stock screening workspace">
+            </div>
           </div>
         </div>
       </section>
@@ -558,18 +762,54 @@
       <section class="project soft">
         <div class="project-inner reveal">
           <div class="project-copy">
-            <p class="project-index">03 · Vision research</p>
-            <h3>N-PTA</h3>
-            <p>An archived CLIP test-time adaptation implementation focused on reproducible hybrid prompt performance.</p>
-            <a class="text-link" href="https://github.com/PeaceMaker-best/npta-hybrid-71" target="_blank" rel="noreferrer">View project</a>
+            <p class="project-index">03 · Model infrastructure</p>
+            <h3>PocketModel</h3>
+            <p>A self-hosted LLM gateway with model routing, quotas, provider health, request evidence, and operations built into one reliable control plane.</p>
+            <div class="project-tags" aria-label="Project highlights">
+              <span class="project-tag">LLM Gateway</span>
+              <span class="project-tag">Provider routing</span>
+              <span class="project-tag">Rust · React</span>
+            </div>
+            <div class="project-links">
+              <span class="private-label">Private build</span>
+            </div>
           </div>
-          <div class="project-visual" aria-hidden="true">
-            <div class="visual-type"><span>71</span></div>
+          <div class="project-visual pocket-visual">
+            <div class="browser-frame">
+              <div class="browser-bar">
+                <span class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="browser-label">PocketModel · Sanitized UI preview</span>
+                <span></span>
+              </div>
+              <div class="pocket-ui" role="img" aria-label="Sanitized preview of the PocketModel operations console">
+                <aside class="pocket-side">
+                  <div class="pocket-logo">PocketModel</div>
+                  <div class="pocket-nav-item active">Overview</div>
+                  <div class="pocket-nav-item">Providers</div>
+                  <div class="pocket-nav-item">Routing</div>
+                  <div class="pocket-nav-item">Evidence</div>
+                </aside>
+                <div class="pocket-main">
+                  <h4>Operations overview</h4>
+                  <p>Reliable model traffic, at a glance.</p>
+                  <div class="status-row">
+                    <div class="status-card"><span>Healthy routes</span><b>12</b></div>
+                    <div class="status-card"><span>Success rate</span><b>99.8%</b></div>
+                    <div class="status-card"><span>p95 latency</span><b>842ms</b></div>
+                  </div>
+                  <div class="routing-panel">
+                    <div class="route-head"><span>Provider routing</span><span>Live</span></div>
+                    <div class="route-row"><span>Reasoning</span><span>Primary pool</span><span class="healthy">Healthy</span></div>
+                    <div class="route-row"><span>Fast chat</span><span>Edge pool</span><span class="healthy">Healthy</span></div>
+                    <div class="route-row"><span>Embeddings</span><span>Vector pool</span><span class="healthy">Healthy</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
     </div>
-
     <section class="articles" id="articles">
       <div class="articles-inner">
         <div class="articles-heading reveal">
@@ -579,12 +819,12 @@
         </div>
         <div class="article-list">
           <a class="article-card reveal" href="./articles/mini-agent-from-scratch.html">
-            <h3>从零手搓一个最小版 Agent</h3>
-            <p>不用 LangChain 或 LangGraph，用纯 Python 看懂 Planner、Executor、Verifier、State 与 Retry 的完整闭环。</p>
+            <h3>Build a Minimal Agent from Scratch</h3>
+            <p>A pure-Python walkthrough of Planner, Executor, Verifier, State, and Retry—without LangChain or LangGraph.</p>
           </a>
           <a class="article-card qatt reveal" href="./articles/qatt-quantum-attention.html">
-            <h3>Qatt：用 4 个量子比特做注意力机制</h3>
-            <p>图解量子电路如何替代 Q/K/V 投影，并用两阶段训练、γ 门控与温度系数稳定优化。</p>
+            <h3>Qatt: Quantum Attention with Four Qubits</h3>
+            <p>How a quantum circuit can replace Q/K/V projections, with two-stage training, γ gating, and temperature scaling.</p>
           </a>
         </div>
       </div>
