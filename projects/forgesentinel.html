@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="ForgeSentinel 重点案例：面向开源维护者的自动化仓库治理系统，把 Issue 提案、PR 评审、分支清理、上下文交接、外部任务和发布证据组织成可审计的维护流水线。" />
+    <link rel="canonical" href="https://peacemaker-best.github.io/projects/forgesentinel.html" />
+    <meta property="og:title" content="ForgeSentinel · PeaceMaker-best Case Study" />
+    <meta property="og:description" content="从 Issue 提案、PR 评审到分支清理和发布证据：ForgeSentinel 自动化仓库治理案例。" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://peacemaker-best.github.io/projects/forgesentinel.html" />
+    <meta property="og:image" content="https://peacemaker-best.github.io/assets/images/forgesentinel/lifecycle.svg" />
+    <title>ForgeSentinel · PeaceMaker-best Case Study</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="image" href="../assets/images/forgesentinel/lifecycle.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="case-page">
+    <header class="case-header">
+      <a class="case-header-brand" href="../index.html" aria-label="PeaceMaker-best 主页">
+        <span class="case-header-mark" aria-hidden="true">T</span>
+        <span>PeaceMaker-best</span>
+      </a>
+      <nav class="case-nav" aria-label="案例导航">
+        <a href="../projects/">← 返回项目</a>
+        <a class="case-nav-gh" href="https://github.com/PeaceMaker-best/ForgeSentinel" rel="noreferrer">GitHub ↗</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="case-hero">
+        <div class="container">
+          <div class="case-hero-grid">
+            <div class="case-hero-text">
+              <span class="section-tag">Maintainer Infrastructure</span>
+              <h1>ForgeSentinel</h1>
+              <p class="case-hero-lead">
+                一个面向开源仓库的维护者自动化系统。它把 Issue 提案、PR 审查、分支清理、上下文交接、外部任务和发布证据放进同一条可追溯流水线，让仓库维护不再依赖零散记忆和手动巡检。
+              </p>
+              <dl class="case-hero-facts" aria-label="ForgeSentinel 技术概览">
+                <div>
+                  <dt>Runtime</dt>
+                  <dd>Python CLI</dd>
+                </div>
+                <div>
+                  <dt>Automation</dt>
+                  <dd>GitHub Actions</dd>
+                </div>
+                <div>
+                  <dt>Agent layer</dt>
+                  <dd>Skills · Ledgers</dd>
+                </div>
+              </dl>
+              <div class="case-hero-actions">
+                <a class="btn btn-primary btn-lg" href="https://github.com/PeaceMaker-best/ForgeSentinel" rel="noreferrer">查看仓库</a>
+                <a class="btn btn-ghost btn-lg" href="#workflow">查看治理链路</a>
+              </div>
+            </div>
+            <div class="case-hero-visual">
+              <div class="case-hero-glow" aria-hidden="true"></div>
+              <img src="../assets/images/forgesentinel/lifecycle.svg" alt="ForgeSentinel 自动化仓库治理生命周期图" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <div class="container">
+          <div class="case-duo">
+            <article class="case-duo-card">
+              <div class="case-duo-icon" aria-hidden="true">◇</div>
+              <span class="case-duo-kicker">Problem</span>
+              <h2>仓库越活跃，维护工作越容易碎片化</h2>
+              <p>Issue、PR、分支、CI、上下文、外部任务和发布说明分别散落在不同界面。维护者真正需要的是一套能把证据、决策和后续动作串起来的系统，而不是只会提醒“还有任务”的看板。</p>
+            </article>
+            <article class="case-duo-card">
+              <div class="case-duo-icon" aria-hidden="true">◆</div>
+              <span class="case-duo-kicker">Approach &amp; Role</span>
+              <h2>把维护动作设计成带证据的状态推进</h2>
+              <p>我把 CLI、GitHub 工作流、技能包、上下文包、评审规则和状态账本合成一个可本地运行的维护者工具链。重点是让每次自动化建议都能回到源码、CI、任务协议和人工确认。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section" id="workflow">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">Governance Lifecycle</span>
+            <h2>一次维护任务怎样进入闭环</h2>
+          </div>
+          <div class="case-flow">
+            <div class="case-flow-track" aria-hidden="true"></div>
+            <article class="case-flow-step">
+              <span class="case-flow-num">01</span>
+              <h3>Intake</h3>
+              <p>把 Issue、PR、外部请求和本地工作区整理成明确任务，补齐目标、约束、上下文和验证入口。</p>
+            </article>
+            <article class="case-flow-step">
+              <span class="case-flow-num">02</span>
+              <h3>Context Pack</h3>
+              <p>为 Agent 或维护者生成可复用上下文包，保留代码事实、风险提示、历史决策和预算边界。</p>
+            </article>
+            <article class="case-flow-step">
+              <span class="case-flow-num">03</span>
+              <h3>Review &amp; Verify</h3>
+              <p>用评审矩阵、CI 信号、变更摘要和验证主机结果判断是否可以推进，避免只看表面 diff。</p>
+            </article>
+            <article class="case-flow-step">
+              <span class="case-flow-num">04</span>
+              <h3>Archive Evidence</h3>
+              <p>把合并、发布、分支清理、回顾和后续任务写回账本，形成下一次维护可以继承的证据。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">System Surface</span>
+            <h2>项目里真正落地的能力</h2>
+          </div>
+          <div class="case-cap-grid">
+            <article class="case-cap-item">
+              <span class="case-cap-num">01</span>
+              <div>
+                <h3>Issue 提案提升</h3>
+                <p>把松散需求整理成可执行任务，生成范围、验收、风险和后续验证建议。</p>
+              </div>
+            </article>
+            <article class="case-cap-item">
+              <span class="case-cap-num">02</span>
+              <div>
+                <h3>PR 评审辅助</h3>
+                <p>围绕行为回归、测试缺口、上下文风险和证据链组织评审，而不是只做文本摘要。</p>
+              </div>
+            </article>
+            <article class="case-cap-item">
+              <span class="case-cap-num">03</span>
+              <div>
+                <h3>分支清理策略</h3>
+                <p>结合合并状态、远端引用、保护分支和保留规则，降低维护者手动清理风险。</p>
+              </div>
+            </article>
+            <article class="case-cap-item">
+              <span class="case-cap-num">04</span>
+              <div>
+                <h3>上下文预算</h3>
+                <p>为长任务生成可裁剪上下文，把关键代码事实和决策历史保留下来。</p>
+              </div>
+            </article>
+            <article class="case-cap-item">
+              <span class="case-cap-num">05</span>
+              <div>
+                <h3>插件技能包</h3>
+                <p>把维护、恢复、理解项目和验证变更拆成可复用技能，让工作方式稳定下来。</p>
+              </div>
+            </article>
+            <article class="case-cap-item">
+              <span class="case-cap-num">06</span>
+              <div>
+                <h3>证据账本</h3>
+                <p>保留外部任务、验证结果、发布检查和回顾记录，让仓库状态能被审计和复盘。</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <div class="container">
+          <div class="case-duo">
+            <article class="case-duo-card case-duo-card--good">
+              <div class="case-duo-icon" aria-hidden="true">✓</div>
+              <span class="case-duo-kicker">Current Fit</span>
+              <h2>当前版本适合什么</h2>
+              <ul class="case-list">
+                <li>需要把开源仓库维护流程系统化的个人或小团队。</li>
+                <li>需要让 Agent 协助但仍保留人工确认和证据链的项目。</li>
+                <li>需要把 Issue、PR、CI、发布、分支清理和上下文交接连起来的仓库。</li>
+              </ul>
+            </article>
+            <article class="case-duo-card case-duo-card--bad">
+              <div class="case-duo-icon" aria-hidden="true">!</div>
+              <span class="case-duo-kicker">Honest Boundaries</span>
+              <h2>仍然明确保留的边界</h2>
+              <ul class="case-list">
+                <li>它是维护者工作台，不是替代代码所有者判断的自动合并机器人。</li>
+                <li>自动化建议需要结合仓库规则、CI 结果和人工审查后再执行。</li>
+                <li>跨组织权限和大规模企业策略仍应接入更完整的权限治理系统。</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="case-footer">
+      <div class="container case-footer-inner">
+        <a href="../projects/">← 返回项目列表</a>
+        <a href="https://github.com/PeaceMaker-best/ForgeSentinel" rel="noreferrer">查看 ForgeSentinel 源码 →</a>
+      </div>
+    </footer>
+  </body>
+</html>

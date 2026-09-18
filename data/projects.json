@@ -41,6 +41,47 @@
     "githubUrl": "https://github.com/PeaceMaker-best/AetherGateway"
   },
   {
+    "id": "forgesentinel",
+    "name": "ForgeSentinel",
+    "status": "active",
+    "availability": {
+      "zh": "开源可访问",
+      "en": "Open Source"
+    },
+    "categories": ["ai", "infra", "product"],
+    "image": {
+      "png": "assets/images/forgesentinel/lifecycle.svg",
+      "alt": {
+        "zh": "ForgeSentinel 自动化仓库治理生命周期图",
+        "en": "ForgeSentinel automated repository governance lifecycle diagram"
+      }
+    },
+    "summary": {
+      "zh": "面向开源维护者的自动化仓库治理系统，把 Issue 提案、PR 评审、分支清理、上下文交接、外部任务和发布证据组织成可审计的维护流水线。",
+      "en": "An automated repository governance system for open-source maintainers, turning issue proposals, PR review, branch cleanup, context handoff, external tasks, and release evidence into an auditable maintenance pipeline."
+    },
+    "tags": {
+      "zh": ["Python CLI", "GitHub Actions", "Agent Skills"],
+      "en": ["Python CLI", "GitHub Actions", "Agent Skills"]
+    },
+    "meta": {
+      "zh": ["仓库治理", "维护者自动化"],
+      "en": ["Repo governance", "Maintainer automation"]
+    },
+    "index": {
+      "direction": {
+        "zh": "开源治理 / Maintainer Infra",
+        "en": "Open-source governance / Maintainer Infra"
+      },
+      "proof": {
+        "zh": "生命周期图、CLI、插件技能与 GitHub 工作流",
+        "en": "Lifecycle diagram, CLI, plugin skills, and GitHub workflows"
+      }
+    },
+    "caseUrl": "projects/forgesentinel.html",
+    "githubUrl": "https://github.com/PeaceMaker-best/ForgeSentinel"
+  },
+  {
     "id": "temu-price-studio",
     "name": "Temu Price Studio",
     "status": "active",
