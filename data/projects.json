@@ -1,7 +1,7 @@
 [
   {
-    "id": "modeldock",
-    "name": "ModelDock",
+    "id": "aethergateway",
+    "name": "AetherGateway",
     "status": "active",
     "availability": {
       "zh": "开源可访问",
@@ -9,10 +9,10 @@
     },
     "categories": ["ai", "infra", "product"],
     "image": {
-      "png": "assets/images/modeldock/dashboard-overview-v2.png",
+      "png": "assets/images/aethergateway/dashboard-overview-v2.png",
       "alt": {
-        "zh": "ModelDock 当前版本运行仪表盘截图",
-        "en": "ModelDock current operations dashboard screenshot"
+        "zh": "AetherGateway 当前版本运行仪表盘截图",
+        "en": "AetherGateway current operations dashboard screenshot"
       }
     },
     "summary": {
@@ -37,8 +37,8 @@
         "en": "Live local screenshots, dual-protocol pipeline, request/attempt ledger"
       }
     },
-    "caseUrl": "projects/modeldock.html",
-    "githubUrl": "https://github.com/PeaceMaker-best/ModelDock"
+    "caseUrl": "projects/aethergateway.html",
+    "githubUrl": "https://github.com/PeaceMaker-best/AetherGateway"
   },
   {
     "id": "temu-price-studio",
@@ -81,8 +81,8 @@
     "caseUrl": "projects/temu-price-studio.html"
   },
   {
-    "id": "quantscope",
-    "name": "QuantScope",
+    "id": "signalfoundry",
+    "name": "SignalFoundry",
     "status": "active",
     "availability": {
       "zh": "本地可运行",
@@ -90,10 +90,10 @@
     },
     "categories": ["ai", "data", "product"],
     "image": {
-      "png": "assets/images/quantscope/workbench-v2.png",
+      "png": "assets/images/signalfoundry/workbench-v2.png",
       "alt": {
-        "zh": "QuantScope 当前版本 Data Agent 量化研究工作台",
-        "en": "QuantScope current Data Agent quantitative research workbench"
+        "zh": "SignalFoundry 当前版本 Data Agent 量化研究工作台",
+        "en": "SignalFoundry current Data Agent quantitative research workbench"
       }
     },
     "summary": {
@@ -118,8 +118,8 @@
         "en": "Live task intake, worker governance, 30 evaluation runs"
       }
     },
-    "caseUrl": "projects/quantscope.html",
-    "githubUrl": "https://github.com/PeaceMaker-best/QuantScope"
+    "caseUrl": "projects/signalfoundry.html",
+    "githubUrl": "https://github.com/PeaceMaker-best/SignalFoundry"
   },
   {
     "id": "museforge",
