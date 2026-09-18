@@ -38,7 +38,7 @@
       }
     },
     "caseUrl": "projects/modelport.html",
-    "githubUrl": "https://github.com/tiammomo/ModelPort"
+    "githubUrl": "https://github.com/PeaceMaker-best/ModelPort"
   },
   {
     "id": "temu-price-studio",
@@ -119,7 +119,7 @@
       }
     },
     "caseUrl": "projects/quantpilot.html",
-    "githubUrl": "https://github.com/tiammomo/QuantPilot"
+    "githubUrl": "https://github.com/PeaceMaker-best/QuantPilot"
   },
   {
     "id": "museforge",
@@ -160,7 +160,7 @@
       }
     },
     "caseUrl": "projects/museforge.html",
-    "githubUrl": "https://github.com/tiammomo/MuseForge"
+    "githubUrl": "https://github.com/PeaceMaker-best/MuseForge"
   },
   {
     "id": "sellerharbor",
@@ -199,7 +199,7 @@
       }
     },
     "caseUrl": "projects/sellerharbor.html",
-    "githubUrl": "https://github.com/tiammomo/SellerHarbor"
+    "githubUrl": "https://github.com/PeaceMaker-best/SellerHarbor"
   },
   {
     "id": "mamoji",
@@ -237,7 +237,7 @@
       }
     },
     "caseUrl": "projects/mamoji.html",
-    "githubUrl": "https://github.com/tiammomo/Mamoji"
+    "githubUrl": "https://github.com/PeaceMaker-best/Mamoji"
   },
   {
     "id": "evolvable-user-memory",
@@ -278,6 +278,6 @@
       }
     },
     "caseUrl": "projects/evolvable-user-memory.html",
-    "githubUrl": "https://github.com/tiammomo/evolvable-user-memory"
+    "githubUrl": "https://github.com/PeaceMaker-best/evolvable-user-memory"
   }
 ]

@@ -1,10 +1,10 @@
-# Tiammomo GitHub Pages Portfolio
+# PeaceMaker-best GitHub Pages Portfolio
 
-Tiammomo 的个人 GitHub Pages 首页，用来对外介绍 AI 产品工程方向的开源实践：LLM 应用、Agent 工作流、数据工具、工程基础设施和全栈产品原型。
+PeaceMaker-best 的个人 GitHub Pages 首页，用来对外介绍 AI 产品工程方向的开源实践：LLM 应用、Agent 工作流、数据工具、工程基础设施和全栈产品原型。
 
 页面采用原创奇幻动漫视觉系统：月夜工作台、精灵系魔法工程师、魔法书与 AI 浮动面板，用来强化“AI 工作站”的个人记忆点，同时避免直接使用任何现成动漫 IP 角色。
 
-这是一个零构建依赖的静态站点，根目录的 `index.html` 会直接作为 `https://tiammomo.github.io/` 的首页发布。
+这是一个零构建依赖的静态站点，根目录的 `index.html` 会直接作为 `https://peacemaker-best.github.io/` 的首页发布。
 
 ## 本地预览
 
@@ -25,7 +25,7 @@ http://127.0.0.1:4173/
 这个站点应推送到用户主页仓库：
 
 ```text
-git@github.com:tiammomo/tiammomo.github.io.git
+git@github.com:PeaceMaker-best/peacemaker-best.github.io.git
 ```
 
 首次同步：
@@ -33,16 +33,16 @@ git@github.com:tiammomo/tiammomo.github.io.git
 ```bash
 git init
 git add .
-git commit -m "Create Tiammomo GitHub Pages portfolio"
+git commit -m "Create PeaceMaker-best GitHub Pages portfolio"
 git branch -M main
-git remote add origin git@github.com:tiammomo/tiammomo.github.io.git
+git remote add origin git@github.com:PeaceMaker-best/peacemaker-best.github.io.git
 git push -u origin main
 ```
 
 如果 `origin` 已存在：
 
 ```bash
-git remote set-url origin git@github.com:tiammomo/tiammomo.github.io.git
+git remote set-url origin git@github.com:PeaceMaker-best/peacemaker-best.github.io.git
 git push -u origin main
 ```
 
@@ -59,12 +59,12 @@ git push
 推送成功后，访问：
 
 ```text
-https://tiammomo.github.io/
+https://peacemaker-best.github.io/
 ```
 
 如果出现 GitHub Pages 404，优先检查：
 
-- 仓库是否是公开仓库 `tiammomo/tiammomo.github.io`。
+- 仓库是否是公开仓库 `PeaceMaker-best/peacemaker-best.github.io`。
 - `index.html` 是否在仓库根目录。
 - 默认分支是否是 `main`。
 - `Settings -> Pages` 是否已经启用，从 `main` 分支的 `/root` 发布。

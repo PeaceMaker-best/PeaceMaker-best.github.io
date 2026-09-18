@@ -15,9 +15,9 @@ POSTER_DIR = ROOT / "assets" / "images" / "writing" / "generated"
 SCENE_DIR = POSTER_DIR / "fantasy-scenes"
 HEADER_IMAGE = SCENE_DIR / "knowledge-map-header-fantasy.png"
 
-FONT_REGULAR = Path("/home/tiammomo/.local/share/fonts/NotoSansCJK-Regular.ttc")
-FONT_BOLD = Path("/home/tiammomo/.local/share/fonts/NotoSansCJK-Bold.ttc")
-FONT_SERIF_BOLD = Path("/home/tiammomo/.local/share/fonts/NotoSerifCJK-Bold.ttc")
+FONT_REGULAR = Path("/home/PeaceMaker-best/.local/share/fonts/NotoSansCJK-Regular.ttc")
+FONT_BOLD = Path("/home/PeaceMaker-best/.local/share/fonts/NotoSansCJK-Bold.ttc")
+FONT_SERIF_BOLD = Path("/home/PeaceMaker-best/.local/share/fonts/NotoSerifCJK-Bold.ttc")
 
 CANVAS_W = 1800
 CANVAS_H = 1030

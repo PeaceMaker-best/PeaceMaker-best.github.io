@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def request_json(url: str, token: str | None) -> object:
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "tiammomo-portfolio-stats",
+        "User-Agent": "PeaceMaker-best-portfolio-stats",
         "X-GitHub-Api-Version": "2022-11-28",
     }
     if token:
@@ -94,7 +94,7 @@ def build_stats(owner: str, projects_path: Path, token: str | None) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Update portfolio homepage profile stats.")
-    parser.add_argument("--owner", default="tiammomo", help="GitHub owner login")
+    parser.add_argument("--owner", default="PeaceMaker-best", help="GitHub owner login")
     parser.add_argument("--projects", type=Path, default=ROOT / "data" / "projects.json")
     parser.add_argument("--output", type=Path, default=ROOT / "data" / "profile-stats.json")
     args = parser.parse_args()
