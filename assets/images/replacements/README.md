@@ -17,8 +17,8 @@ assets/images/generated/
 Use one image per slot. Supported extensions: `.png`, `.jpg`, `.jpeg`, `.webp`.
 
 ```text
-modelport.png
-quantpilot.png
+modeldock.png
+quantscope.png
 evolvable-user-memory.png
 mamoji.png
 sellerharbor.png

@@ -1,7 +1,7 @@
 [
   {
-    "id": "modelport",
-    "name": "ModelPort",
+    "id": "modeldock",
+    "name": "ModelDock",
     "status": "active",
     "availability": {
       "zh": "开源可访问",
@@ -9,10 +9,10 @@
     },
     "categories": ["ai", "infra", "product"],
     "image": {
-      "png": "assets/images/modelport/dashboard-overview-v2.png",
+      "png": "assets/images/modeldock/dashboard-overview-v2.png",
       "alt": {
-        "zh": "ModelPort 当前版本运行仪表盘截图",
-        "en": "ModelPort current operations dashboard screenshot"
+        "zh": "ModelDock 当前版本运行仪表盘截图",
+        "en": "ModelDock current operations dashboard screenshot"
       }
     },
     "summary": {
@@ -37,8 +37,8 @@
         "en": "Live local screenshots, dual-protocol pipeline, request/attempt ledger"
       }
     },
-    "caseUrl": "projects/modelport.html",
-    "githubUrl": "https://github.com/PeaceMaker-best/ModelPort"
+    "caseUrl": "projects/modeldock.html",
+    "githubUrl": "https://github.com/PeaceMaker-best/ModelDock"
   },
   {
     "id": "temu-price-studio",
@@ -81,8 +81,8 @@
     "caseUrl": "projects/temu-price-studio.html"
   },
   {
-    "id": "quantpilot",
-    "name": "QuantPilot",
+    "id": "quantscope",
+    "name": "QuantScope",
     "status": "active",
     "availability": {
       "zh": "本地可运行",
@@ -90,10 +90,10 @@
     },
     "categories": ["ai", "data", "product"],
     "image": {
-      "png": "assets/images/quantpilot/workbench-v2.png",
+      "png": "assets/images/quantscope/workbench-v2.png",
       "alt": {
-        "zh": "QuantPilot 当前版本 Data Agent 量化研究工作台",
-        "en": "QuantPilot current Data Agent quantitative research workbench"
+        "zh": "QuantScope 当前版本 Data Agent 量化研究工作台",
+        "en": "QuantScope current Data Agent quantitative research workbench"
       }
     },
     "summary": {
@@ -118,8 +118,8 @@
         "en": "Live task intake, worker governance, 30 evaluation runs"
       }
     },
-    "caseUrl": "projects/quantpilot.html",
-    "githubUrl": "https://github.com/PeaceMaker-best/QuantPilot"
+    "caseUrl": "projects/quantscope.html",
+    "githubUrl": "https://github.com/PeaceMaker-best/QuantScope"
   },
   {
     "id": "museforge",

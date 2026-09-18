@@ -25,8 +25,8 @@ class ImageSlot:
 
 SLOTS = [
     ImageSlot("portfolio-og", "anime-portfolio-og", 1440),
-    ImageSlot("modelport", "anime-cover-modelport", 1200),
-    ImageSlot("quantpilot", "anime-cover-quantpilot", 1200),
+    ImageSlot("modeldock", "anime-cover-modeldock", 1200),
+    ImageSlot("quantscope", "anime-cover-quantscope", 1200),
     ImageSlot("evolvable-user-memory", "anime-cover-evolvable-user-memory", 1200),
     ImageSlot("mamoji", "anime-cover-mamoji", 1200),
     ImageSlot("sellerharbor", "anime-cover-sellerharbor", 1200),
