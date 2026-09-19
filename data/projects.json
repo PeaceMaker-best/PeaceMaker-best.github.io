@@ -7,7 +7,11 @@
       "zh": "开源可访问",
       "en": "Open Source"
     },
-    "categories": ["ai", "infra", "product"],
+    "categories": [
+      "ai",
+      "infra",
+      "product"
+    ],
     "image": {
       "png": "assets/images/aethergateway/dashboard-overview-v2.png",
       "alt": {
@@ -20,12 +24,26 @@
       "en": "A self-hosted multi-protocol model gateway that unifies authentication, policy, budgets, routing, and observability across Anthropic Messages and OpenAI Chat, with a control plane for providers, models, and the enterprise request ledger."
     },
     "tags": {
-      "zh": ["Rust + Axum", "React 控制面", "PostgreSQL 账本"],
-      "en": ["Rust + Axum", "React control plane", "PostgreSQL ledger"]
+      "zh": [
+        "Rust + Axum",
+        "React 控制面",
+        "PostgreSQL 账本"
+      ],
+      "en": [
+        "Rust + Axum",
+        "React control plane",
+        "PostgreSQL ledger"
+      ]
     },
     "meta": {
-      "zh": ["多协议网关", "租户预算账本"],
-      "en": ["Multi-protocol gateway", "Tenant budget ledger"]
+      "zh": [
+        "多协议网关",
+        "租户预算账本"
+      ],
+      "en": [
+        "Multi-protocol gateway",
+        "Tenant budget ledger"
+      ]
     },
     "index": {
       "direction": {
@@ -48,7 +66,11 @@
       "zh": "开源可访问",
       "en": "Open Source"
     },
-    "categories": ["ai", "infra", "product"],
+    "categories": [
+      "ai",
+      "infra",
+      "product"
+    ],
     "image": {
       "png": "assets/images/forgesentinel/lifecycle.svg",
       "alt": {
@@ -61,12 +83,26 @@
       "en": "An automated repository governance system for open-source maintainers, turning issue proposals, PR review, branch cleanup, context handoff, external tasks, and release evidence into an auditable maintenance pipeline."
     },
     "tags": {
-      "zh": ["Python CLI", "GitHub Actions", "Agent Skills"],
-      "en": ["Python CLI", "GitHub Actions", "Agent Skills"]
+      "zh": [
+        "Python CLI",
+        "GitHub Actions",
+        "Agent Skills"
+      ],
+      "en": [
+        "Python CLI",
+        "GitHub Actions",
+        "Agent Skills"
+      ]
     },
     "meta": {
-      "zh": ["仓库治理", "维护者自动化"],
-      "en": ["Repo governance", "Maintainer automation"]
+      "zh": [
+        "仓库治理",
+        "维护者自动化"
+      ],
+      "en": [
+        "Repo governance",
+        "Maintainer automation"
+      ]
     },
     "index": {
       "direction": {
@@ -82,54 +118,18 @@
     "githubUrl": "https://github.com/PeaceMaker-best/ForgeSentinel"
   },
   {
-    "id": "temu-price-studio",
-    "name": "Temu Price Studio",
-    "status": "active",
-    "availability": {
-      "zh": "本地可运行",
-      "en": "Local Build"
-    },
-    "categories": ["ai", "data", "product"],
-    "image": {
-      "png": "assets/images/temu-price-studio/sku-details.png",
-      "alt": {
-        "zh": "Temu Price Studio SKU 工作台脱敏截图",
-        "en": "Temu Price Studio anonymized SKU workbench screenshot"
-      }
-    },
-    "summary": {
-      "zh": "本地优先的 Temu 核价生图工作台，串联 SKU 数据、素材证据、提示词版本管理、候选抽卡、人工审核、QA 和最终包追溯。",
-      "en": "A local-first Temu price-check and image-generation workspace that connects SKU data, evidence assets, prompt versioning, candidate generation, human review, QA, and traceable final packages."
-    },
-    "tags": {
-      "zh": ["React + Vite", "Express", "任务执行记录"],
-      "en": ["React + Vite", "Express", "Task trace"]
-    },
-    "meta": {
-      "zh": ["SKU 工作流", "提示词版本管理"],
-      "en": ["SKU workflow", "Prompt versioning"]
-    },
-    "index": {
-      "direction": {
-        "zh": "核价生图 / 审核流程",
-        "en": "Pricing image workflow"
-      },
-      "proof": {
-        "zh": "真实运行截图，SKU 已脱敏",
-        "en": "Real screenshots with anonymized SKU data"
-      }
-    },
-    "caseUrl": "projects/temu-price-studio.html"
-  },
-  {
     "id": "signalfoundry",
     "name": "SignalFoundry",
     "status": "active",
     "availability": {
-      "zh": "本地可运行",
-      "en": "Local Demo"
+      "zh": "开源可访问",
+      "en": "Open Source"
     },
-    "categories": ["ai", "data", "product"],
+    "categories": [
+      "ai",
+      "data",
+      "product"
+    ],
     "image": {
       "png": "assets/images/signalfoundry/workbench-v2.png",
       "alt": {
@@ -142,12 +142,26 @@
       "en": "A financial research application built on a general Data Agent and MoAgent Framework, connecting natural-language questions, real data, durable workers, generated workspaces, and quality gates in one traceable delivery pipeline."
     },
     "tags": {
-      "zh": ["Data Agent", "MoAgent Worker", "TimescaleDB"],
-      "en": ["Data Agent", "MoAgent Worker", "TimescaleDB"]
+      "zh": [
+        "Data Agent",
+        "MoAgent Worker",
+        "TimescaleDB"
+      ],
+      "en": [
+        "Data Agent",
+        "MoAgent Worker",
+        "TimescaleDB"
+      ]
     },
     "meta": {
-      "zh": ["finance.quant", "评测 + 交付门禁"],
-      "en": ["finance.quant", "Evaluation + delivery gates"]
+      "zh": [
+        "finance.quant",
+        "评测 + 交付门禁"
+      ],
+      "en": [
+        "finance.quant",
+        "Evaluation + delivery gates"
+      ]
     },
     "index": {
       "direction": {
@@ -161,164 +175,5 @@
     },
     "caseUrl": "projects/signalfoundry.html",
     "githubUrl": "https://github.com/PeaceMaker-best/SignalFoundry"
-  },
-  {
-    "id": "museforge",
-    "name": "MuseForge",
-    "status": "active",
-    "availability": {
-      "zh": "本地可运行",
-      "en": "Local Demo"
-    },
-    "categories": ["ai", "product", "infra"],
-    "image": {
-      "png": "assets/images/museforge/overview.png",
-      "alt": {
-        "zh": "MuseForge 电商 AI 图像生产工作站概览截图",
-        "en": "MuseForge e-commerce AI image production workspace overview"
-      }
-    },
-    "summary": {
-      "zh": "本地优先的电商 AI 图像生产工作站，把商品事实、参考图、五类商品图任务、批量生成、候选审核和画布精修组织成可追踪的生产链。",
-      "en": "A local-first AI image production workspace that connects product truth, references, five e-commerce shot types, batch generation, candidate review, and canvas refinement in one traceable workflow."
-    },
-    "tags": {
-      "zh": ["React 19", "FastAPI", "Konva 画布"],
-      "en": ["React 19", "FastAPI", "Konva canvas"]
-    },
-    "meta": {
-      "zh": ["Local-first", "5 类商品图"],
-      "en": ["Local-first", "5 shot types"]
-    },
-    "index": {
-      "direction": {
-        "zh": "AI 生图生产 / Product",
-        "en": "AI image production / Product"
-      },
-      "proof": {
-        "zh": "真实运行截图、任务矩阵、审核与画布链路",
-        "en": "Live screenshots, task matrix, review and canvas workflow"
-      }
-    },
-    "caseUrl": "projects/museforge.html",
-    "githubUrl": "https://github.com/PeaceMaker-best/MuseForge"
-  },
-  {
-    "id": "sellerharbor",
-    "name": "SellerHarbor",
-    "status": "active",
-    "featured": false,
-    "availability": {
-      "zh": "开源可访问",
-      "en": "Open Source"
-    },
-    "categories": ["ai", "product", "infra"],
-    "image": {
-      "png": "assets/images/sellerharbor/dashboard.png",
-      "alt": {
-        "zh": "SellerHarbor 跨境卖家商品运营看板真实截图",
-        "en": "SellerHarbor cross-border seller operations dashboard screenshot"
-      }
-    },
-    "summary": {
-      "zh": "面向 Temu / TikTok Shop 跨境卖家的商品运营港，统一商品主档、平台 Listing、海外仓库存、真实反馈、内容生成和审核动作。",
-      "en": "A product operations harbor for Temu and TikTok Shop sellers, unifying product master data, platform listings, overseas inventory, real feedback, generation, and review workflows."
-    },
-    "tags": ["Next.js", "FastAPI", "Commerce Ops"],
-    "meta": {
-      "zh": ["商品运营港", "审核导出"],
-      "en": ["Seller workspace", "Review export"]
-    },
-    "index": {
-      "direction": {
-        "zh": "跨境运营 / Commerce",
-        "en": "Commerce ops / Product"
-      },
-      "proof": {
-        "zh": "商品主档、反馈、审核导出截图",
-        "en": "Product master data, feedback, review export screenshots"
-      }
-    },
-    "caseUrl": "projects/sellerharbor.html",
-    "githubUrl": "https://github.com/PeaceMaker-best/SellerHarbor"
-  },
-  {
-    "id": "mamoji",
-    "name": "Mamoji",
-    "status": "active",
-    "availability": {
-      "zh": "开源可访问",
-      "en": "Open Source"
-    },
-    "categories": ["product", "infra"],
-    "image": {
-      "png": "assets/images/mamoji/dashboard.png",
-      "alt": {
-        "zh": "Mamoji 企业经营工作台真实截图",
-        "en": "Mamoji business operations dashboard screenshot"
-      }
-    },
-    "summary": {
-      "zh": "面向初创公司和小团队的轻量经营管理系统，统一收入、成本、预算、票据、税务、人员薪酬和生产运维。",
-      "en": "A lightweight business operations system for startups and small teams, covering revenue, costs, budgets, receipts, tax, payroll, and production operations."
-    },
-    "tags": ["Next.js", "Spring Boot", "PostgreSQL"],
-    "meta": {
-      "zh": ["经营中台", "生产部署"],
-      "en": ["Operations OS", "Production ops"]
-    },
-    "index": {
-      "direction": {
-        "zh": "经营管理 / Full-stack",
-        "en": "Operations system / Full-stack"
-      },
-      "proof": {
-        "zh": "经营、税务、票据、薪酬截图",
-        "en": "Operations, tax, receipt, payroll screenshots"
-      }
-    },
-    "caseUrl": "projects/mamoji.html",
-    "githubUrl": "https://github.com/PeaceMaker-best/Mamoji"
-  },
-  {
-    "id": "evolvable-user-memory",
-    "name": "Evolvable User Memory",
-    "status": "active",
-    "availability": {
-      "zh": "开源预览",
-      "en": "Open Preview"
-    },
-    "categories": ["ai", "data", "infra", "product"],
-    "image": {
-      "png": "assets/images/evolvable-user-memory/workbench.png",
-      "alt": {
-        "zh": "Evolvable User Memory 当前记忆工作台真实截图",
-        "en": "Current Evolvable User Memory workbench"
-      }
-    },
-    "summary": {
-      "zh": "面向 AI 应用的证据驱动、结果感知用户记忆服务，把原始证据、不可变信念修订、召回 Trace、真实 Outcome 与有界策略演化组织成可审计闭环。",
-      "en": "An evidence-grounded, outcome-aware user memory service for AI applications, connecting raw evidence, immutable belief revisions, recall traces, real outcomes, and bounded strategy evolution in an auditable loop."
-    },
-    "tags": {
-      "zh": ["Python + FastAPI", "PostgreSQL + Milvus", "Outcome 归因"],
-      "en": ["Python + FastAPI", "PostgreSQL + Milvus", "Outcome attribution"]
-    },
-    "meta": {
-      "zh": ["5 个记忆平面", "读 ≠ 强化"],
-      "en": ["5 memory planes", "Read ≠ reinforce"]
-    },
-    "index": {
-      "direction": {
-        "zh": "可演化用户记忆 / AI Infra",
-        "en": "Evolvable user memory / AI Infra"
-      },
-      "proof": {
-        "zh": "真实工作台、双时间召回、Outcome 归因与治理门禁",
-        "en": "Live workbench, bitemporal recall, outcome attribution, and governance gates"
-      }
-    },
-    "caseUrl": "projects/evolvable-user-memory.html",
-    "githubUrl": "https://github.com/PeaceMaker-best/evolvable-user-memory"
   }
 ]

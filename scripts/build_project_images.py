@@ -26,12 +26,8 @@ class ImageSlot:
 SLOTS = [
     ImageSlot("portfolio-og", "anime-portfolio-og", 1440),
     ImageSlot("aethergateway", "anime-cover-aethergateway", 1200),
+    ImageSlot("forgesentinel", "anime-cover-forgesentinel", 1200),
     ImageSlot("signalfoundry", "anime-cover-signalfoundry", 1200),
-    ImageSlot("evolvable-user-memory", "anime-cover-evolvable-user-memory", 1200),
-    ImageSlot("mamoji", "anime-cover-mamoji", 1200),
-    ImageSlot("sellerharbor", "anime-cover-sellerharbor", 1200),
-    ImageSlot("museforge", "anime-cover-museforge", 1200),
-    ImageSlot("temu-price-studio", "anime-cover-temu-price-studio", 1200),
 ]
 
 

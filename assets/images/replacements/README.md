@@ -19,10 +19,8 @@ Use one image per slot. Supported extensions: `.png`, `.jpg`, `.jpeg`, `.webp`.
 ```text
 aethergateway.png
 signalfoundry.png
-evolvable-user-memory.png
-mamoji.png
-sellerharbor.png
-temu-price-studio.png
+forgesentinel.png
+signalfoundry.png
 portfolio-og.png
 ```
 
